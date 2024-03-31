@@ -4,6 +4,7 @@ public class TpsMovement : MonoBehaviour
 {
     public Animator Anim;
     public float Speed = 2f;
+    public float RotationSpeed = 5f; // Dönme hızı
 
     private Rigidbody rb;
 
@@ -31,12 +32,15 @@ public class TpsMovement : MonoBehaviour
         {
             Anim.SetBool("Running", true);
             rb.velocity = direction * Speed;
+
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+            Quaternion targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
+            rb.MoveRotation(Quaternion.Lerp(rb.rotation, targetRotation, Time.deltaTime * RotationSpeed));
         }
         else
         {
             Anim.SetBool("Running", false);
+            rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, 5 * Time.deltaTime);
         }
     }
 }
