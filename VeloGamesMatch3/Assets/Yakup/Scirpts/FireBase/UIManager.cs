@@ -9,20 +9,16 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    [SerializeField]
-    private GameObject loginPanel;
+    [SerializeField] private GameObject loginPanel;
 
-    [SerializeField]
-    private GameObject registrationPanel;
-    [SerializeField]
-    private GameObject gamePanel;
+    [SerializeField] private GameObject registrationPanel;
+    [SerializeField] private GameObject gamePanel;
 
     [Space]
-    [SerializeField]
-    private GameObject emailVerificationPanel;
+    [SerializeField] private GameObject emailVerificationPanel;
 
-    [SerializeField]
-    private Text emailVerificationText;
+    [SerializeField] private Text emailVerificationText;
+    
     [Space]
     [Header("Profile Picture Update  Data ")]
     public GameObject profileUpdatePanel;

@@ -33,24 +33,7 @@ public class FirebaseAuthManager : MonoBehaviour
     private string defaultUserImage = "https://www.esportimes.com/wp-content/uploads/2022/08/esportimeslogo-optimized.png";
 
 
-    //NOT AUTO LOGIN
-    /* private void Awake()
-        {
-          
-            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-            {
-                dependencyStatus = task.Result;
 
-                if (dependencyStatus == DependencyStatus.Available)
-                {
-                    InitializeFirebase();
-                }
-                else
-                {
-                    Debug.LogError("Could not resolve all firebase dependencies: " + dependencyStatus);
-                }
-            });
-        } */
     private void Start()
     {
         StartCoroutine(CheckAndFixDependenciesAsync());
