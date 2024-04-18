@@ -11,6 +11,7 @@ using System;
 public class FirebaseAuthManager : MonoBehaviour
 {
     // Firebase variable
+
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
     public FirebaseAuth auth;
@@ -32,12 +33,12 @@ public class FirebaseAuthManager : MonoBehaviour
 
     private string defaultUserImage = "https://www.esportimes.com/wp-content/uploads/2022/08/esportimeslogo-optimized.png";
 
-
-
     private void Start()
     {
+        // Firebase bağımlılıklarını başlat
         StartCoroutine(CheckAndFixDependenciesAsync());
     }
+
     private IEnumerator CheckAndFixDependenciesAsync()
     {
         var dependencyTask = FirebaseApp.CheckAndFixDependenciesAsync();
@@ -53,17 +54,18 @@ public class FirebaseAuthManager : MonoBehaviour
         else
         {
             Debug.LogError("Could not resolve all firebase dependencies: " + dependencyStatus);
+            UIManager.Instance.ErrorTxT.text = "Could not resolve all firebase dependencies: " + dependencyStatus;
+
         }
     }
 
     void InitializeFirebase()
     {
-
         auth = FirebaseAuth.DefaultInstance;
-
         auth.StateChanged += AuthStateChanged;
         AuthStateChanged(this, null);
     }
+
     private IEnumerator CheckForAutoLogin()
     {
         if (user != null)
@@ -76,8 +78,8 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             UIManager.Instance.OpenLoginPanel();
         }
-
     }
+
     private void AutoLogin()
     {
         if (user != null)
@@ -104,7 +106,6 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
-
     void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
         if (auth.CurrentUser != user)
@@ -126,15 +127,18 @@ public class FirebaseAuthManager : MonoBehaviour
             }
         }
     }
+
     private void ClearLoginInputFieldText()
     {
         emailLoginField.text = "";
         passwordLoginField.text = "";
     }
+
     public void Login()
     {
         StartCoroutine(LoginAsync(emailLoginField.text, passwordLoginField.text));
     }
+
     public void Logout()
     {
         if (auth != null && user != null)
@@ -155,7 +159,6 @@ public class FirebaseAuthManager : MonoBehaviour
 
             FirebaseException firebaseException = loginTask.Exception.GetBaseException() as FirebaseException;
             AuthError authError = (AuthError)firebaseException.ErrorCode;
-
 
             string failedMessage = "Login Failed! Because ";
 
@@ -179,6 +182,8 @@ public class FirebaseAuthManager : MonoBehaviour
             }
 
             Debug.Log(failedMessage);
+            UIManager.Instance.ErrorTxT.text = failedMessage;
+
         }
         else
         {
@@ -200,27 +205,30 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 SendEmailForVerifaction();
             }
-
-
         }
     }
+
     public void Register()
     {
         StartCoroutine(RegisterAsync(nameRegisterField.text, emailRegisterField.text, passwordRegisterField.text, confirmPasswordRegisterField.text));
     }
+
     private IEnumerator RegisterAsync(string name, string email, string password, string confirmPassword)
     {
         if (name == "")
         {
             Debug.LogError("User Name is empty");
+            UIManager.Instance.ErrorTxT.text = "User Name is empty";
         }
         else if (email == "")
         {
             Debug.LogError("email field is empty");
+            UIManager.Instance.ErrorTxT.text = "email field is empty";
         }
         else if (passwordRegisterField.text != confirmPasswordRegisterField.text)
         {
             Debug.LogError("Password does not match");
+            UIManager.Instance.ErrorTxT.text = "Password does not match";
         }
         else
         {
@@ -256,10 +264,11 @@ public class FirebaseAuthManager : MonoBehaviour
                 }
 
                 Debug.Log(failedMessage);
+                UIManager.Instance.ErrorTxT.text = failedMessage;
             }
             else
             {
-                // Yeni oluşturulan kullanıcı bilgilerini al
+                // bilgileri al
                 Firebase.Auth.AuthResult authResult = registerTask.Result;
                 FirebaseUser newUser = authResult.User;
 
@@ -351,15 +360,17 @@ public class FirebaseAuthManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Email has uccessfully sent");
+                Debug.Log("Email has successfully sent");
                 UIManager.Instance.ShowVerificationResponse(true, user.Email, null);
             }
         }
     }
+
     public void UpdateProfilePicture()
     {
         StartCoroutine(UpdateProfilePictureIE());
     }
+
     private IEnumerator UpdateProfilePictureIE()
     {
         if (user != null)
@@ -387,6 +398,7 @@ public class FirebaseAuthManager : MonoBehaviour
             else
             {
                 Debug.LogError("Invalid URL format:" + url);
+                UIManager.Instance.ErrorTxT.text = "Invalid URL format:" + url;
             }
         }
     }
@@ -394,5 +406,6 @@ public class FirebaseAuthManager : MonoBehaviour
     public void OpenGameScene()
     {
         SceneManager.LoadScene(1);
+
     }
 }

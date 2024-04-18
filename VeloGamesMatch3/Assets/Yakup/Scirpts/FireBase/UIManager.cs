@@ -14,16 +14,22 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject registrationPanel;
     [SerializeField] private GameObject gamePanel;
 
+
     [Space]
     [SerializeField] private GameObject emailVerificationPanel;
 
     [SerializeField] private Text emailVerificationText;
-    
+
     [Space]
+
     [Header("Profile Picture Update  Data ")]
     public GameObject profileUpdatePanel;
     public Image profileImage;
     public InputField urlInputField;
+
+
+    public Text ErrorTxT;
+
 
 
     private void Awake()
@@ -90,6 +96,7 @@ public class UIManager : MonoBehaviour
     public IEnumerator LoadProfileImageIE(string url)
     {
         Debug.Log("Loading image from URL: " + url);
+       
 
         UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
         yield return www.SendWebRequest();
@@ -97,6 +104,7 @@ public class UIManager : MonoBehaviour
         if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
         {
             Debug.LogError("Error loading image: " + www.error);
+            ErrorTxT.text = "Error loading image: " + www.error;
         }
         else
         {
@@ -110,7 +118,10 @@ public class UIManager : MonoBehaviour
             }
             else
             {
+
                 Debug.LogError("Downloaded texture is null");
+                ErrorTxT.text = "Downloaded texture is null";
+
             }
         }
     }

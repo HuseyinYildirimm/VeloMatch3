@@ -47,6 +47,8 @@ public class LeaderboardManager : MonoBehaviour
         else
         {
             Debug.LogError("Failed to check Firebase dependencies: " + dependencyTask.Result);
+            UIManager.Instance.ErrorTxT.text = "Failed to check Firebase dependencies: " + dependencyTask.Result;
+
         }
     }
 
@@ -78,6 +80,7 @@ public class LeaderboardManager : MonoBehaviour
         if (args.DatabaseError != null)
         {
             Debug.LogError(args.DatabaseError.Message);
+            UIManager.Instance.ErrorTxT.text = args.DatabaseError.Message;
             return;
         }
 
@@ -100,6 +103,7 @@ public class LeaderboardManager : MonoBehaviour
         if (string.IsNullOrEmpty(playerName))
         {
             Debug.LogError("Player name cannot be empty!");
+            UIManager.Instance.ErrorTxT.text = "Player name cannot be empty!";
             return;
         }
 
@@ -119,6 +123,7 @@ public class LeaderboardManager : MonoBehaviour
         if (task.Exception != null)
         {
             Debug.LogError(task.Exception);
+            UIManager.Instance.ErrorTxT.text = task.Exception.ToString();
         }
     }
 
@@ -140,7 +145,6 @@ public class LeaderboardManager : MonoBehaviour
         }
 
         DataSnapshot snapshot = getScoresTask.Result;
-
         List<ScoreEntry> scoreEntries = new List<ScoreEntry>();
 
         foreach (var childSnapshot in snapshot.Children)
@@ -156,8 +160,9 @@ public class LeaderboardManager : MonoBehaviour
         foreach (var entry in scoreEntries)
         {
             GameObject panel = Instantiate(leaderboardPanelPrefab, leaderboardPanel);
-            panel.transform.Find("NameText").GetComponent<Text>().text = entry.name;
-            panel.transform.Find("ScoreText").GetComponent<Text>().text = entry.score.ToString();
+            panel.GetComponent<ScorePF>().NameTxt.text = entry.name;
+            panel.GetComponent<ScorePF>().ScoreTxt.text = entry.score.ToString();
         }
     }
 }
+

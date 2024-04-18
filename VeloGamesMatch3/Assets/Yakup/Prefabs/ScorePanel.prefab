@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9411765, g: 0.506302, b: 0.11764706, a: 1}
+  m_Color: {r: 0.07604885, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 1945220459747679759}
   - component: {fileID: 2798431168084916798}
   - component: {fileID: 8861654806289604654}
+  - component: {fileID: 6053139148313768514}
   m_Layer: 5
   m_Name: ScorePanel
   m_TagString: Untagged
@@ -120,7 +121,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1747944924401906669}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.094, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -155,14 +156,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.29917967, g: 1, b: 0.8362512, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7b0d029f1d2a164488ab0a51a21ca796, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3dd234a76f40ce24fa2645f79e88f453, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -172,6 +173,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6053139148313768514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1747944924401906669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ae2f8c8163acb4fb981392f95b8c42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NameTxt: {fileID: 8243346462479505156}
+  ScoreTxt: {fileID: 8954247615161325947}
 --- !u!1 &8499451978207665856
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9411765, g: 0.506302, b: 0.11764706, a: 1}
+  m_Color: {r: 0.07604885, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

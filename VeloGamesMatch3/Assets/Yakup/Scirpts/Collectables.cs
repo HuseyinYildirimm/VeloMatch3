@@ -6,36 +6,30 @@ public class Collectables : MonoBehaviour, ICollectible
 {
 
     [SerializeField] private GameObject _collectedParticle;
+    public Transform GFX;
+
+
+
     private void Start()
     {
+
+
+        transform.DORotate(new Vector3(0f, 360f, 0f), 1f, RotateMode.LocalAxisAdd)
+            .SetLoops(-1, LoopType.Incremental)
+            .SetEase(Ease.Linear);
         _collectedParticle.SetActive(true);
+
     }
 
-    public void Collect(GameObject players)
+    public void DeActiveParticle()
     {
-        Debug.Log("ÇAĞIRDI");
-        PlayerController player = players.GetComponent<PlayerController>();
-
-
-        transform.SetParent(player.HandPos);
-        transform.GetChild(0).localScale = new Vector3(50f, 50f, 50f);
-        player.Animator.SetTrigger("isPicking");
-        transform.DOMove(player.HandPos.position, 0.01f).SetEase(Ease.Linear).OnComplete(() =>
-             {
-
-                 Debug.Log("GİRDİ");
-                 _collectedParticle.SetActive(false);
-
-             });
+        _collectedParticle.transform.localScale = _collectedParticle.transform.localScale / 2;
     }
 
 
-    private void OnTriggerEnter(Collider other)
+
+    public void Collect(GameObject player)
     {
 
-        if (other.gameObject.CompareTag("Player"))
-        {
-            Collect(other.gameObject);
-        }
     }
 }

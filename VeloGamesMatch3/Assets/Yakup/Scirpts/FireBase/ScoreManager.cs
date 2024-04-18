@@ -19,19 +19,7 @@ public class ScoreManager : MonoBehaviour
             }
         }
     }
-    private void Start()
-    {
-        // firebaseAuthManager nesnesinin null olup olmadığını kontrol et
-        if (firebaseAuthManager != null && firebaseAuthManager.auth != null && firebaseAuthManager.auth.CurrentUser != null)
-        {
-            // firebaseAuthManager.auth.CurrentUser değerini kullanarak skorları güncelle
-            leaderboardManager.UpdateLeaderboard();
-        }
-        else
-        {
-            Debug.LogWarning("FirebaseAuthManager is not initialized or there is no authenticated user.");
-        }
-    }
+   
 
     public void AddScorer()
     {
