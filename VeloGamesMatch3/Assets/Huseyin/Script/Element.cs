@@ -7,6 +7,7 @@ using UnityEngine;
 public class Element : MonoBehaviour
 {
     public ElementType elementType;
+    public int elementScore = 10;
 
     public int xIndex;
     public int yIndex;
@@ -30,24 +31,34 @@ public class Element : MonoBehaviour
         yIndex = _y;
     }
 
-    public void MoveToTarget(Vector2 target)
+    public void MoveToTarget(Vector2 target , Element _moveElement,float duration)
     {
-        StartCoroutine(MoveCoroutine(target));
+        if (_moveElement == null)
+        {
+            Debug.LogWarning("MoveToTarget: _moveElement is null!");
+            return;
+        }
+        StartCoroutine(MoveCoroutine(target, _moveElement,duration));
     }
 
-    private IEnumerator MoveCoroutine(Vector2 target)
+    private IEnumerator MoveCoroutine(Vector2 target ,Element _moveElement,float duration)
     {
         isMoving = true;
         Vector2 startPos = transform.position;
 
-        float duration = 0.2f;
-        float elaspedTime = 0f;
+        float elapsedTime = 0f;
 
-        while (elaspedTime < duration)
+        while (elapsedTime < duration)
         {
-            float t = elaspedTime / duration;
+            if (_moveElement == null)
+            {
+                isMoving = false;
+                yield break;
+            }
+
+            float t = elapsedTime / duration;
             transform.position = Vector2.Lerp(startPos, target, t);
-            elaspedTime += Time.deltaTime;
+            elapsedTime += Time.deltaTime;
 
             yield return null;
         }
@@ -55,6 +66,7 @@ public class Element : MonoBehaviour
         transform.position = target;
         isMoving = false;
     }
+
 }
 
 public enum ElementType
@@ -63,5 +75,6 @@ public enum ElementType
     White,
     Black,
     Green,
-    Blue
+    Blue,
+    Boom
 }

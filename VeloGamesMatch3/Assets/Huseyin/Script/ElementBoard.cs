@@ -4,25 +4,34 @@ using UnityEngine;
 
 public class ElementBoard : MonoBehaviour
 {
+    [Header("Elements")]
+    public GameObject[] ElementPrefabs;
+    public GameObject ElementParent;
+    public GameObject ElementBoardGO;
+    [SerializeField] private Element selectedElement;
+
+    [Header("BoardSettings")]
     public int Width;
     public int Height;
 
     public float SpacingX;
     public float SpacingY;
 
-    public GameObject[] ElementPrefabs;
-
     private Tile[,] elementBoard;
-    public GameObject ElementBoardGO;
-    public GameObject ElementParent;
 
-    [SerializeField] private Element selectedElement;
-    [SerializeField] private bool isProcessingMove;
-    public float processedDelay = 0.2f;
+    [Space(10)]
+
+    public bool isProcessingMove;
     public int maxIndex = 8;
+    public float durationSpeed;
+    public float processedDelay = 0.2f;
+    public float boomThreshold;
+
+    [Space(10)]
 
     public List<GameObject> elementsToDestroy = new();
-    public List<Element> connectedElements = new();
+    List<Element> elementsToRemove = new List<Element>();
+
     public static ElementBoard Instance;
 
     public void Awake()
@@ -30,10 +39,6 @@ public class ElementBoard : MonoBehaviour
         Instance = this;
     }
 
-    public void Start()
-    {
-        InitializeBoard();
-    }
     public void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -52,8 +57,11 @@ public class ElementBoard : MonoBehaviour
         }
     }
 
-    private void InitializeBoard()
+    public void InitializeBoard(int rows, int columns)
     {
+        Width = rows;
+        Height = columns;
+        maxIndex = Height;
         DestroyElements();
         elementBoard = new Tile[Width, Height];
 
@@ -67,24 +75,37 @@ public class ElementBoard : MonoBehaviour
             {
                 Vector2 pos = new Vector2(x - SpacingX, y - SpacingY);
 
-                // elementBoard[x, y] = new Tile(false, null);
-                int randomIndex = Random.Range(0, ElementPrefabs.Length);
+                elementBoard[x, y] = new Tile(false, null);
 
-                //After creating a random element, we set its position and make it usable.
+                int randomIndex;
+                float randomValue = Random.value;
+
+                if (randomValue < boomThreshold)
+                {
+                    randomIndex = ElementPrefabs.Length - 1; // index of last element(boom)
+                }
+                else
+                {
+                    randomIndex = Random.Range(0, ElementPrefabs.Length - 1); // except last element
+                }
+
                 GameObject element = Instantiate(ElementPrefabs[randomIndex], pos, Quaternion.identity);
                 element.transform.SetParent(ElementParent.transform);
                 element.GetComponent<Element>().SetIndex(x, y);
+
                 elementBoard[x, y] = new Tile(true, element);
                 elementsToDestroy.Add(element);
             }
         }
-        if (CheckBoard(false))
+
+        if (CheckBoard())
         {
-            InitializeBoard();
+            InitializeBoard(Width, Height);
         }
         else
         {
             Debug.Log("There are no matches");
+            GameManager.Instance.score = 0;
         }
     }
 
@@ -100,11 +121,11 @@ public class ElementBoard : MonoBehaviour
         }
     }
 
-    public bool CheckBoard(bool _takeAction)
+    public bool CheckBoard()
     {
         bool hasMatched = false;
 
-        List<Element> elementsToRemove = new();
+        elementsToRemove.Clear();
 
         foreach (Tile tileElement in elementBoard)
         {
@@ -121,45 +142,49 @@ public class ElementBoard : MonoBehaviour
             {
                 if (elementBoard[x, y].isUsable)
                 {
-                    Element element = elementBoard[x, y].element.GetComponent<Element>();
+                    GameObject elementObj = elementBoard[x, y].element;
 
-                    if (!element.isMatched)
+                    if (elementObj != null)
                     {
-                        MatchResult matchedElements = IsConnected(element);
+                        Element element = elementObj.GetComponent<Element>();
 
-                        if (matchedElements.connectedElements.Count >= 3)
+                        if (!element.isMatched && element != null)
                         {
-                            MatchResult superMatchedPotions = SuperMatch(matchedElements);
+                            MatchResult matchedElements = IsConnected(element);
 
-                            elementsToRemove.AddRange(superMatchedPotions.connectedElements);
+                            if (matchedElements.connectedElements.Count >= 3)
+                            {
+                                MatchResult superMatchedPotions = SuperMatch(matchedElements);
 
-                            foreach (Element e in matchedElements.connectedElements)
-                                e.isMatched = true;
+                                elementsToRemove.AddRange(superMatchedPotions.connectedElements);
 
-                            hasMatched = true;
+                                foreach (Element e in matchedElements.connectedElements)
+                                    e.isMatched = true;
+
+                                hasMatched = true;
+                            }
                         }
                     }
                 }
             }
         }
+        return hasMatched;
+    }
 
-        if (_takeAction)
+    public IEnumerator ProcessTurnOnMatchedBoard(bool _subtractMoves)
+    {
+        foreach (Element potionToRemove in elementsToRemove)
         {
-            foreach (Element elementToRemove in elementsToRemove)
-            {
-                elementToRemove.isMatched = false;
-            }
-
-            RemoveAndRefill(elementsToRemove);
-
-            if (CheckBoard(false))
-            {
-                CheckBoard(true);
-            }
+            potionToRemove.isMatched = false;
         }
 
+        RemoveAndRefill(elementsToRemove);
+        yield return new WaitForSeconds(0.4f);
 
-        return hasMatched;
+        if (CheckBoard())
+        {
+            StartCoroutine(ProcessTurnOnMatchedBoard(false));
+        }
     }
 
     private void RemoveAndRefill(List<Element> elementsToRemove)
@@ -170,7 +195,6 @@ public class ElementBoard : MonoBehaviour
             int _yIndex = element.yIndex;
 
             Destroy(element.gameObject);
-            elementsToDestroy.Remove(element.gameObject);
 
             elementBoard[_xIndex, _yIndex] = new Tile(true, null);
 
@@ -188,8 +212,42 @@ public class ElementBoard : MonoBehaviour
         }
     }
 
+    private void MoveElementToEmptySpace(int x, int y)
+    {
+        if (elementBoard[x, y].element != null)
+        {
+            int newX = x;
+            int newY = y;
+
+            while (elementBoard[newX, newY].element != null)
+            {
+                newX += 1;
+                if (newX >= Width)
+                {
+                    newX = 0;
+                    newY += 1;
+                    if (newY >= Height)
+                    {
+                        newY = 0;
+                    }
+                }
+            }
+
+            elementBoard[newX, newY].element = elementBoard[x, y].element;
+            elementBoard[x, y].element = null;
+
+            elementBoard[newX, newY].element.transform.position = new Vector3(newX - SpacingX, newY - SpacingY, elementBoard[newX, newY].element.transform.position.z);
+        }
+    }
+
     private void RefillElement(int x, int y)
     {
+        if (elementBoard[x, y].element != null)
+        {
+            MoveElementToEmptySpace(x, y);
+            return;
+        }
+
         int yOffset = 1;
 
         while (y + yOffset < Height && elementBoard[x, y + yOffset].element == null)
@@ -199,14 +257,17 @@ public class ElementBoard : MonoBehaviour
 
         if (y + yOffset < Height && elementBoard[x, y + yOffset].element != null)
         {
+            //we've found a potion
             Element elementAbove = elementBoard[x, y + yOffset].element.GetComponent<Element>();
 
+            //Move it to the correct location
             Vector3 targetPos = new Vector3(x - SpacingX, y - SpacingY, elementAbove.transform.position.z);
 
-            elementAbove.MoveToTarget(targetPos);
+            elementAbove.MoveToTarget(targetPos, elementAbove, durationSpeed);
 
             elementAbove.SetIndex(x, y);
 
+            //update our potionBoard
             elementBoard[x, y] = elementBoard[x, y + yOffset];
 
             elementBoard[x, y + yOffset] = new Tile(transform, null);
@@ -215,7 +276,6 @@ public class ElementBoard : MonoBehaviour
         if (y + yOffset == Height)
         {
             SpawnElementAtTop(x);
-            Debug.Log("SpawnAtTop");
         }
     }
 
@@ -224,21 +284,40 @@ public class ElementBoard : MonoBehaviour
         int index = FindIndexOfLowestNull(x);
         int locationMoveTo = maxIndex - index;
 
-        int randomIndex = Random.Range(0, ElementPrefabs.Length);
-        GameObject newElement = Instantiate(ElementPrefabs[randomIndex], new Vector2(x - SpacingX, Height - SpacingY), Quaternion.identity);
-        newElement.transform.SetParent(ElementParent.transform);
-        newElement.GetComponent<Element>().SetIndex(x, index);
+        if (elementBoard[x, index].element == null)
+        {
+            int randomIndex;
+            float randomValue = Random.value;
 
-        elementBoard[x, index] = new Tile(true, newElement);
+            if (randomValue < boomThreshold)
+            {
+                randomIndex = ElementPrefabs.Length - 1; // index of last element(boom)
+            }
+            else
+            {
+                randomIndex = Random.Range(0, ElementPrefabs.Length - 1); // except last element
+            }
 
-        Vector3 targetPos = new Vector3(newElement.transform.position.x, newElement.transform.position.y - locationMoveTo, newElement.transform.position.z);
-        newElement.GetComponent<Element>().MoveToTarget(targetPos);
+            GameObject newElementGO = Instantiate(ElementPrefabs[randomIndex], new Vector2(x - SpacingX, Height - SpacingY), Quaternion.identity);
+            newElementGO.transform.SetParent(ElementParent.transform);
+            Element newElement = newElementGO.GetComponent<Element>();
+            newElement.SetIndex(x, index);
+
+            elementBoard[x, index] = new Tile(true, newElementGO);
+
+            Vector3 targetPos = new Vector3(newElementGO.transform.position.x, newElementGO.transform.position.y - locationMoveTo, newElementGO.transform.position.z);
+            newElement.MoveToTarget(targetPos, newElement, durationSpeed);
+        }
+        else
+        {
+            Debug.LogWarning("SpawnElementAtTop: Tile at the top is already filled!");
+        }
     }
 
     private int FindIndexOfLowestNull(int x)
     {
         int lowestNull = 99;
-        for (int y = 7; y >= 0; y--)
+        for (int y = Height - 1; y >= 0; y--)
         {
             if (elementBoard[x, y].element == null)
             {
@@ -310,7 +389,7 @@ public class ElementBoard : MonoBehaviour
 
     MatchResult IsConnected(Element element)//Checking the number of neighbors and taking action accordingly
     {
-        
+        List<Element> connectedElements = new();
         ElementType elementType = element.elementType;
 
         connectedElements.Add(element);
@@ -321,7 +400,7 @@ public class ElementBoard : MonoBehaviour
         if (connectedElements.Count == 3)
         {
             Debug.Log("Match Horizontal " + connectedElements[0].elementType);
-
+            GameManager.Instance.score += element.elementScore;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -331,7 +410,7 @@ public class ElementBoard : MonoBehaviour
         else if (connectedElements.Count > 3)
         {
             Debug.Log("Match Long Horizontal " + connectedElements[0].elementType);
-
+            GameManager.Instance.score += element.elementScore * 2;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -348,7 +427,7 @@ public class ElementBoard : MonoBehaviour
         if (connectedElements.Count == 3)
         {
             Debug.Log("Match Vertical " + connectedElements[0].elementType);
-
+            GameManager.Instance.score += element.elementScore;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -358,7 +437,7 @@ public class ElementBoard : MonoBehaviour
         else if (connectedElements.Count > 3)
         {
             Debug.Log("Match Long Vertical " + connectedElements[0].elementType);
-
+            GameManager.Instance.score += element.elementScore * 2;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -376,7 +455,7 @@ public class ElementBoard : MonoBehaviour
 
     }
 
-    void CheckDirection(Element element, Vector2Int direction, List<Element> connectedElements)//If there is a match, find their positions and add them to the list.
+    void CheckDirection(Element element, Vector2Int direction, List<Element> connectedElements)
     {
         ElementType elementType = element.elementType;
 
@@ -387,13 +466,20 @@ public class ElementBoard : MonoBehaviour
         {
             if (elementBoard[x, y].isUsable)
             {
-                Element neighbourPos = elementBoard[x, y].element.GetComponent<Element>();
-
-                if (!neighbourPos.isMatched && neighbourPos.elementType == elementType)
+                GameObject elementGameObject = elementBoard[x, y].element;
+                if (elementGameObject != null)
                 {
-                    connectedElements.Add(neighbourPos);
-                    x += direction.x;
-                    y += direction.y;
+                    Element neighbourPos = elementGameObject.GetComponent<Element>();
+                    if (neighbourPos != null && !neighbourPos.isMatched && neighbourPos.elementType == elementType)
+                    {
+                        connectedElements.Add(neighbourPos);
+                        x += direction.x;
+                        y += direction.y;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
                 else
                 {
@@ -413,27 +499,24 @@ public class ElementBoard : MonoBehaviour
 
     public void SelectElement(Element _element)
     {
-        if (_element != null)
+        if (selectedElement == null)
         {
-            if (selectedElement == null)
-            {
-                selectedElement = _element;
-            }
-            else if (selectedElement == _element)
-            {
-                selectedElement = null;
-            }
-            else if (selectedElement != null)
-            {
-                SwapElement(selectedElement, _element);
-                selectedElement = null;
-            }
+            selectedElement = _element;
+        }
+        else if (selectedElement == _element)
+        {
+            selectedElement = null;
+        }
+        else if (selectedElement != null)
+        {
+            SwapElement(selectedElement, _element);
+            selectedElement = null;
         }
     }
 
     private void SwapElement(Element _currentElement, Element _targetElement)
     {
-        if (!IsAdjacent(_currentElement, _targetElement))
+        if (_currentElement == null || _targetElement == null || !IsAdjacent(_currentElement, _targetElement))
         {
             return;
         }
@@ -442,16 +525,31 @@ public class ElementBoard : MonoBehaviour
 
         isProcessingMove = true;
 
+        StartCoroutine(GameManager.Instance.SwapRightAmount(durationSpeed));
+
         StartCoroutine(ProcessMatches(_currentElement, _targetElement));
+
+        StartCoroutine(ExplodeAfterSwap(_currentElement, _targetElement));
     }
 
     private void DoSwap(Element _currentElement, Element _targetElement)
     {
+        if (_currentElement == null || _targetElement == null)
+        {
+            Debug.LogWarning("DoSwap: _currentElement or _targetElement is null!");
+            return;
+        }
+        if (_currentElement.xIndex == _targetElement.xIndex && _currentElement.yIndex == _targetElement.yIndex)
+        {
+            return;
+        }
+
         GameObject temp = elementBoard[_currentElement.xIndex, _currentElement.yIndex].element;
 
         elementBoard[_currentElement.xIndex, _currentElement.yIndex].element = elementBoard[_targetElement.xIndex, _targetElement.yIndex].element;
         elementBoard[_targetElement.xIndex, _targetElement.yIndex].element = temp;
 
+        //update indicies.
         int tempXIndex = _currentElement.xIndex;
         int tempYIndex = _currentElement.yIndex;
         _currentElement.xIndex = _targetElement.xIndex;
@@ -459,31 +557,73 @@ public class ElementBoard : MonoBehaviour
         _targetElement.xIndex = tempXIndex;
         _targetElement.yIndex = tempYIndex;
 
-        Debug.Log(_currentElement.xIndex + " " + _currentElement.yIndex
-            + " " + _targetElement.xIndex + " " + _targetElement.yIndex);
-
-        _currentElement.MoveToTarget(elementBoard[_targetElement.xIndex, _targetElement.yIndex].element.transform.position);
-        _targetElement.MoveToTarget(elementBoard[_currentElement.xIndex, _currentElement.yIndex].element.transform.position);
+        _currentElement.MoveToTarget(elementBoard[_targetElement.xIndex, _targetElement.yIndex].element.transform.position, _currentElement, durationSpeed);
+        _targetElement.MoveToTarget(elementBoard[_currentElement.xIndex, _currentElement.yIndex].element.transform.position, _targetElement, durationSpeed);
     }
 
     private IEnumerator ProcessMatches(Element _currentElement, Element _targetElement)
     {
         yield return new WaitForSeconds(processedDelay);
 
-        bool hasMatch = CheckBoard(false);
-
-        if (!hasMatch)
+        if (CheckBoard())
+        {
+            StartCoroutine(ProcessTurnOnMatchedBoard(true));
+        }
+        else
         {
             DoSwap(_currentElement, _targetElement);
         }
         isProcessingMove = false;
     }
 
-
     private bool IsAdjacent(Element _currentElement, Element _targetElement)
     {
         return Mathf.Abs(_currentElement.xIndex - _targetElement.xIndex) + Mathf.Abs(_currentElement.yIndex - _targetElement.yIndex) == 1;
     }
+    #endregion
+
+    #region BOOM
+
+    private void BoomExplode(int xIndex, int yIndex)
+    {
+        // Explode elements in the same row
+        for (int x = 0; x < Width; x++)
+        {
+            Element elementToExplode = elementBoard[x, yIndex].element?.GetComponent<Element>();
+            if (elementToExplode != null && !elementToExplode.isMatched)
+            {
+                elementsToRemove.Add(elementToExplode);
+            }
+        }
+
+        // Explode elements in the same column
+        for (int y = 0; y < Height; y++)
+        {
+            Element elementToExplode = elementBoard[xIndex, y].element?.GetComponent<Element>();
+            if (elementToExplode != null && !elementToExplode.isMatched)
+            {
+                elementsToRemove.Add(elementToExplode);
+            }
+        }
+
+        StartCoroutine(ProcessTurnOnMatchedBoard(false));
+    }
+
+    private IEnumerator ExplodeAfterSwap(Element _currentElement, Element _targetElement)
+    {
+        yield return new WaitForSeconds(processedDelay); // Swap iþlemi tamamlandýktan sonra bir süre bekle
+
+        // Boom elementlerinin olduðu satýr ve sütunlarý patlat
+        if (_currentElement.elementType == ElementType.Boom)
+        {
+            BoomExplode(_targetElement.xIndex, _targetElement.yIndex);
+        }
+        else if (_targetElement.elementType == ElementType.Boom)
+        {
+            BoomExplode(_currentElement.xIndex, _currentElement.yIndex);
+        }
+    }
+
     #endregion
 }
 
@@ -501,6 +641,6 @@ public enum MatchDirection
     LongVertical,
     LongHorizontal,
     Super,
+    Boom,
     None
 }
-
