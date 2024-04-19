@@ -18,7 +18,7 @@ public class LevelButton : MonoBehaviour
         button.onClick.AddListener(OnButtonClick);
         levelText.text = levelID.ToString();
 
-        if (LevelManager.Instance.IsLevelLocked(levelID))
+        if (LevelManager1.Instance.IsLevelLocked(levelID))
         {
             lockedImage.gameObject.SetActive(true);
             button.interactable = false;

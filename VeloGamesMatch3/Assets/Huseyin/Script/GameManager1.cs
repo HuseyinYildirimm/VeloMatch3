@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager1 : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManager1 Instance;
 
     public GameObject GameAgainButton;
 

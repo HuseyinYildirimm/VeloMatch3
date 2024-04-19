@@ -10,9 +10,9 @@ public class Level
     public int levelScore;
 }
 
-public class LevelManager : MonoBehaviour
+public class LevelManager1 : MonoBehaviour
 {
-    public static LevelManager Instance;
+    public static LevelManager1 Instance;
     [SerializeField] private List<Level> levels;
     private void Awake()
     {

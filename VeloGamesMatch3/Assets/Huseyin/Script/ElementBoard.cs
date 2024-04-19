@@ -105,7 +105,7 @@ public class ElementBoard : MonoBehaviour
         else
         {
             Debug.Log("There are no matches");
-            GameManager.Instance.score = 0;
+            GameManager1.Instance.score = 0;
         }
     }
 
@@ -400,7 +400,7 @@ public class ElementBoard : MonoBehaviour
         if (connectedElements.Count == 3)
         {
             Debug.Log("Match Horizontal " + connectedElements[0].elementType);
-            GameManager.Instance.score += element.elementScore;
+            GameManager1.Instance.score += element.elementScore;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -410,7 +410,7 @@ public class ElementBoard : MonoBehaviour
         else if (connectedElements.Count > 3)
         {
             Debug.Log("Match Long Horizontal " + connectedElements[0].elementType);
-            GameManager.Instance.score += element.elementScore * 2;
+            GameManager1.Instance.score += element.elementScore * 2;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -427,7 +427,7 @@ public class ElementBoard : MonoBehaviour
         if (connectedElements.Count == 3)
         {
             Debug.Log("Match Vertical " + connectedElements[0].elementType);
-            GameManager.Instance.score += element.elementScore;
+            GameManager1.Instance.score += element.elementScore;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -437,7 +437,7 @@ public class ElementBoard : MonoBehaviour
         else if (connectedElements.Count > 3)
         {
             Debug.Log("Match Long Vertical " + connectedElements[0].elementType);
-            GameManager.Instance.score += element.elementScore * 2;
+            GameManager1.Instance.score += element.elementScore * 2;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -525,7 +525,7 @@ public class ElementBoard : MonoBehaviour
 
         isProcessingMove = true;
 
-        StartCoroutine(GameManager.Instance.SwapRightAmount(durationSpeed));
+        StartCoroutine(GameManager1.Instance.SwapRightAmount(durationSpeed));
 
         StartCoroutine(ProcessMatches(_currentElement, _targetElement));
 
