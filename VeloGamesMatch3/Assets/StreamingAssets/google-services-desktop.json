@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "firebase_url":"https://match3-e7da7-default-rtdb.firebaseio.com/",
+    "project_number": "106720326982",
+    "project_id": "match3-e7da7",
+    "storage_bucket": "match3-e7da7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106720326982:android:f93d73e58305d97887e147",
+        "android_client_info": {
+          "package_name": "com.match3.velogames"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbgiDRQZdXeem3kw8SAcMCFjr4Gzc-HvE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
