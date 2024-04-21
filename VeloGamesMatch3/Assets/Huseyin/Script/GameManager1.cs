@@ -16,6 +16,8 @@ public class GameManager1 : MonoBehaviour
     public TextMeshProUGUI SwapRightText;
     public int swapRight;
 
+    public float delay;
+
     public void Awake()
     {
         Instance = this;
@@ -44,10 +46,10 @@ public class GameManager1 : MonoBehaviour
     {
         Time.timeScale = 1f;
         swapRight = 2;
-        SceneManager.LoadScene("Huseyin");
+        SceneManager.LoadScene("GameScene");
     }
 
-    public IEnumerator SwapRightAmount(float delay)
+    public IEnumerator SwapRightAmount()
     {
         yield return new WaitForSeconds(delay);
         swapRight--;

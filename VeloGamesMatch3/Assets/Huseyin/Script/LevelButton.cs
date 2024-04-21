@@ -33,6 +33,6 @@ public class LevelButton : MonoBehaviour
     private void OnButtonClick()
     {
         ElementBoard.Instance.InitializeBoard(rows, colums);
-        
+        LevelManager1.Instance.currentLevel = levelID;
     }
 }
