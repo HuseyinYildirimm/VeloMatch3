@@ -34,9 +34,13 @@ public class ElementBoard : MonoBehaviour
 
     public static ElementBoard Instance;
 
+    GameAudioManager audioManager;
+
     public void Awake()
     {
         Instance = this;
+
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<GameAudioManager>();
     }
 
     public void Update()
@@ -162,6 +166,7 @@ public class ElementBoard : MonoBehaviour
                                     e.isMatched = true;
 
                                 hasMatched = true;
+                                audioManager.PlaySFX(audioManager.stone);
                             }
                         }
                     }
@@ -593,6 +598,7 @@ public class ElementBoard : MonoBehaviour
             if (elementToExplode != null && !elementToExplode.isMatched)
             {
                 elementsToRemove.Add(elementToExplode);
+                audioManager.PlaySFX(audioManager.dynamite);
             }
         }
 
@@ -603,6 +609,7 @@ public class ElementBoard : MonoBehaviour
             if (elementToExplode != null && !elementToExplode.isMatched)
             {
                 elementsToRemove.Add(elementToExplode);
+                audioManager.PlaySFX(audioManager.dynamite);
             }
         }
 
