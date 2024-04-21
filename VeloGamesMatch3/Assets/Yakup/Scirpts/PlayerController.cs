@@ -12,8 +12,11 @@ public class PlayerController : MonoBehaviour
 
     Collectables collectablesObj;
 
-    private void Start()
+    OpeningAudioManager audioManager;
+
+    private void Awake()
     {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<OpeningAudioManager>();
 
     }
     public void SetAnimator()
@@ -29,6 +32,7 @@ public class PlayerController : MonoBehaviour
             collectablesObj.transform.DOMove(HandPos.position, 0.01f).SetEase(Ease.Linear).OnComplete(() =>
                  {
                      Debug.Log("Collect");
+                     audioManager.PlaySFX(audioManager.gem1);
                      caveLoginDoor.CanDrop = true;
                      isPicking = false;
                  });

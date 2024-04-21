@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StartingAudioManager : MonoBehaviour
+public class OpeningAudioManager : MonoBehaviour
 {
     [Header("----------- Audio Source -----------")]
     [SerializeField] AudioSource music;
@@ -17,4 +17,16 @@ public class StartingAudioManager : MonoBehaviour
     public AudioClip gem4;
     public AudioClip gem5;
 
+    
+    private void Start()
+    {
+        music.clip = background;
+        music.Play();
+
+    }
+
+    public void PlaySFX(AudioClip clip)
+    {
+        SFX.PlayOneShot(clip);
+    }
 }
