@@ -1,4 +1,4 @@
-﻿ using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,14 +19,14 @@ public class ScoreManager : MonoBehaviour
             }
         }
     }
-   
+
 
     public void AddScorer()
     {
         if (firebaseAuthManager != null && firebaseAuthManager.auth != null && firebaseAuthManager.auth.CurrentUser != null)
         {
             // firebaseAuthManager.auth.CurrentUser.DisplayName değerini kullanarak bir oyuncu skoru ekleyin
-            leaderboardManager.AddScore(firebaseAuthManager.auth.CurrentUser.DisplayName, Random.Range(0, 100));
+            leaderboardManager.AddScore(firebaseAuthManager.auth.CurrentUser.DisplayName, Random.Range(0, 100), Random.Range(0, 5));
         }
         else
         {

@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+
 using Cinemachine;
 using DG.Tweening;
 using UnityEngine;
@@ -18,6 +18,7 @@ public class CaveLoginDoor : MonoBehaviour
     PlayerController playerController;
     public int rockPointCount = 0;
     public bool CanDrop = false;
+    private const float MoveDuration = 2f;
 
 
 
@@ -41,8 +42,6 @@ public class CaveLoginDoor : MonoBehaviour
         _animationDoors.Play();
         yield return new WaitForSeconds(2);
         GoToCave(player);
-
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -63,28 +62,20 @@ public class CaveLoginDoor : MonoBehaviour
     public IEnumerator GoToCaveIE(Transform player)
     {
         virtualCamera.Follow = null;
-        WaitForSeconds waitForSeconds = new WaitForSeconds(2f);
+        WaitForSeconds waitForSeconds = new WaitForSeconds(MoveDuration);
         playerController.Anim.SetBool("Running", true);
-        int cnt = 0;
-        for (int i = 0; i < wayPoints.Length; i++)
+
+        foreach (Transform wayPoint in wayPoints)
         {
-            cnt++;
-            Vector3 lookDirection = (wayPoints[i].transform.position - player.transform.position).normalized;
+            Vector3 lookDirection = (wayPoint.position - player.position).normalized;
             Quaternion targetRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
-            player.transform.rotation = targetRotation;
+            player.rotation = targetRotation;
 
-
-            player.DOMove(wayPoints[i].transform.position, 2f).SetEase(Ease.Linear);
-            if (cnt >= 3)
-            {
-                SceneManager.LoadScene("GameScene");
-            }
+            player.DOMove(wayPoint.position, MoveDuration).SetEase(Ease.Linear);
             yield return waitForSeconds;
-
         }
 
-
+        SceneManager.LoadScene("GameScene");
     }
-
 
 }

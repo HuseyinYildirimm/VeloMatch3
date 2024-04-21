@@ -98,7 +98,7 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    public void AddScore(string playerName, long score)
+    public void AddScore(string playerName, long score, int level)
     {
         if (string.IsNullOrEmpty(playerName))
         {
@@ -107,7 +107,7 @@ public class LeaderboardManager : MonoBehaviour
             return;
         }
 
-        ScoreEntry newEntry = new ScoreEntry(playerName, score, auth.CurrentUser.UserId);
+        ScoreEntry newEntry = new ScoreEntry(playerName, score, auth.CurrentUser.UserId, level); // Seviye eklendi
         UpdateUserScore(newEntry);
     }
 
@@ -152,7 +152,8 @@ public class LeaderboardManager : MonoBehaviour
             string playerName = childSnapshot.Child("name").Value.ToString();
             long playerScore = (long)childSnapshot.Child("score").Value;
             string userId = childSnapshot.Key;
-            scoreEntries.Add(new ScoreEntry(playerName, playerScore, userId));
+            int playerLevel = Convert.ToInt32(childSnapshot.Child("level").Value); // Seviye eklendi
+            scoreEntries.Add(new ScoreEntry(playerName, playerScore, userId, playerLevel)); // Seviye eklendi
         }
 
         scoreEntries = scoreEntries.OrderByDescending(entry => entry.score).ToList();
@@ -162,7 +163,9 @@ public class LeaderboardManager : MonoBehaviour
             GameObject panel = Instantiate(leaderboardPanelPrefab, leaderboardPanel);
             panel.GetComponent<ScorePF>().NameTxt.text = entry.name;
             panel.GetComponent<ScorePF>().ScoreTxt.text = entry.score.ToString();
+            panel.GetComponent<ScorePF>().LevelTxt.text = "Level: " + entry.level.ToString(); // Seviye eklendi
         }
     }
+
 }
 
