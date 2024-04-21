@@ -1,13 +1,15 @@
-﻿  public class ScoreEntry
-    {
-        public string name;
-        public long score;
-        public string userId;
+﻿public class ScoreEntry
+{
+    public string name;
+    public long score;
+    public string userId;
+    public int level; 
 
-        public ScoreEntry(string _name, long _score, string _userId)
-        {
-            name = _name;
-            score = _score;
-            userId = _userId;
-        }
+    public ScoreEntry(string name, long score, string userId, int level)
+    {
+        this.name = name;
+        this.score = score;
+        this.userId = userId;
+        this.level = level; 
     }
+}

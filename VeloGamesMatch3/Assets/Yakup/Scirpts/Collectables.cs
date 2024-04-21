@@ -7,19 +7,41 @@ public class Collectables : MonoBehaviour, ICollectible
 
     [SerializeField] private GameObject _collectedParticle;
     public Transform GFX;
+    private Tween _tween; // _tween değişkeni tanımlanır
 
-
-
-    private void Start()
+    private void OnEnable()
     {
-
-
-        transform.DORotate(new Vector3(0f, 360f, 0f), 1f, RotateMode.LocalAxisAdd)
-            .SetLoops(-1, LoopType.Incremental)
-            .SetEase(Ease.Linear);
-        _collectedParticle.SetActive(true);
-
+        StartTween();
     }
+
+    private void OnDisable()
+    {
+        StopTween();
+    }
+
+    private void StartTween()
+    {
+        if (transform != null)
+        {
+            _tween = transform.DORotate(new Vector3(0f, 360f, 0f), 1f, RotateMode.LocalAxisAdd)
+                .SetLoops(-1, LoopType.Incremental)
+                .SetEase(Ease.Linear);
+        }
+
+        if (_collectedParticle != null)
+        {
+            _collectedParticle.SetActive(true);
+        }
+    }
+
+    private void StopTween()
+    {
+        if (_tween != null)
+        {
+            _tween.Kill(); // Tweeni durdur
+        }
+    }
+
 
     public void DeActiveParticle()
     {

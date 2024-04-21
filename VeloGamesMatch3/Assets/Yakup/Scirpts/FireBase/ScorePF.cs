@@ -14,5 +14,6 @@ public class ScorePF : MonoBehaviour
 {
   public Text NameTxt;
   public Text ScoreTxt;
+  public Text LevelTxt;
 
 }

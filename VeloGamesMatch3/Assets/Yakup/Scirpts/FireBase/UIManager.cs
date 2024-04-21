@@ -31,6 +31,11 @@ public class UIManager : MonoBehaviour
     public Text ErrorTxT;
 
 
+    [SerializeField] private GameObject Yellow;
+    [SerializeField] private GameObject Blue;
+    [SerializeField] private GameObject Green;
+    [SerializeField] private GameObject Purple;
+    [SerializeField] private GameObject Red;
 
     private void Awake()
     {
@@ -96,7 +101,7 @@ public class UIManager : MonoBehaviour
     public IEnumerator LoadProfileImageIE(string url)
     {
         Debug.Log("Loading image from URL: " + url);
-       
+
 
         UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
         yield return www.SendWebRequest();

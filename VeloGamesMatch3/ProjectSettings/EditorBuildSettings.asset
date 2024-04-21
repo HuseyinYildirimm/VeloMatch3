@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/OpeninScene.unity
     guid: bbab650bd97839f4881dad49a80cf7ae
   - enabled: 1
-    path: Assets/Scenes/GameScene2.unity
-    guid: a75c7febf97faba46b922de76197aed3
+    path: Assets/Scenes/GameScene.unity
+    guid: 105244c15374e934cb4227b61bd88afc
   m_configObjects: {}
