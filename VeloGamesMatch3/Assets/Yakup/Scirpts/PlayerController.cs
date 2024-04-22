@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -5,80 +6,84 @@ public class PlayerController : MonoBehaviour
 {
     public Transform HandPos;
     public Animator Anim;
-    public CaveLoginDoor caveLoginDoor;
-    public int uniqRockCount = 5;
+    public CaveLoginDoor CaveLoginDoor;
+    public int UniqueRockCount = 5;
+    private const float ActivationDelay = 1.4f;
 
-    public bool isPicking = false;
+    public bool IsPicking = false;
 
-    Collectables collectablesObj;
-    GameManager gameManager;
+    private Collectables _collectablesObj;
+    private GameManager _gameManager;
+
     private void Start()
     {
-        GameManager gameManager = FindAnyObjectByType<GameManager>();
+        _gameManager = FindAnyObjectByType<GameManager>();
     }
+
     public void SetAnimator()
     {
-        Anim.SetTrigger("isPicking");
+        Anim.SetTrigger("IsPicking");
     }
+
     public void Collect(GameObject obj)
     {
-        if (isPicking && !caveLoginDoor.CanDrop)
+        if (IsPicking && !CaveLoginDoor.CanDrop)
         {
-            collectablesObj.transform.SetParent(HandPos);
-            collectablesObj.GFX.localScale = new Vector3(50f, 50f, 50f);
-            collectablesObj.transform.DOMove(HandPos.position, 0.01f).SetEase(Ease.Linear).OnComplete(() =>
-                 {
-                     Debug.Log("Collect");
-                     caveLoginDoor.CanDrop = true;
-                     isPicking = false;
-
-                 });
+            _collectablesObj.transform.SetParent(HandPos);
+            _collectablesObj.GFX.localScale = new Vector3(50f, 50f, 50f);
+            _collectablesObj.transform.DOMove(HandPos.position, 0.01f)
+                .SetEase(Ease.Linear)
+                .OnComplete(() =>
+                {
+                    Debug.Log("Collect");
+                    CaveLoginDoor.CanDrop = true;
+                    IsPicking = false;
+                });
         }
     }
 
-    public void DropUnqieRocks()
+    public void DropUniqueRocks()
     {
-        if (caveLoginDoor.CanDrop && !isPicking)
+        if (CaveLoginDoor.CanDrop && !IsPicking)
         {
-            int i = caveLoginDoor.rockPointCount;
+            int i = CaveLoginDoor.RockPointCount;
             if (i > 5)
                 return;
             TpsMovement movement = GetComponent<TpsMovement>();
             movement.StopMoving();
 
-            collectablesObj.transform.DOMove(caveLoginDoor.UniqeRockPostions[i].position, 1.5f).SetEase(Ease.OutFlash).OnComplete(() =>
-                     {
-                         Debug.Log("Drop");
+            _collectablesObj.transform.DOMove(CaveLoginDoor.UniqueRockPositions[i].position, 1.5f)
+                .SetEase(Ease.OutFlash)
+                .OnComplete(() =>
+                {
+                    Debug.Log("Drop");
 
-                         collectablesObj.transform.SetParent(caveLoginDoor.transform.GetChild(0));
-                         collectablesObj.GFX.localScale = new Vector3(70f, 70f, 70f);
+                    _collectablesObj.transform.SetParent(CaveLoginDoor.transform.GetChild(0));
+                    _collectablesObj.GFX.localScale = new Vector3(70f, 70f, 70f);
 
-                         caveLoginDoor.rockPointCount++;
-                         caveLoginDoor.CanDrop = false;
+                    CaveLoginDoor.RockPointCount++;
+                    CaveLoginDoor.CanDrop = false;
 
-                         collectablesObj.DeActiveParticle();
-                         collectablesObj.GetComponent<CapsuleCollider>().enabled = false;
+                    _collectablesObj.DeActiveParticle();
+                    _collectablesObj.GetComponent<CapsuleCollider>().enabled = false;
 
-                         movement.isMoving = true;
-                         Anim.SetBool("Running", true);
+                    movement.IsMoving = true;
+                    Anim.SetBool("Running", true);
 
-                         if (caveLoginDoor.rockPointCount > 4)
-                         {
-                             movement.StopMoving();
-                             caveLoginDoor.OpenCaveDoorAnimations(transform);
-
-                         }
-                     }); ;
+                    if (CaveLoginDoor.RockPointCount > 4)
+                    {
+                        movement.StopMoving();
+                        CaveLoginDoor.OpenCaveDoorAnimations(transform);
+                    }
+                });
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Collectables"))
         {
-
-            if (!caveLoginDoor.CanDrop)
+            if (!CaveLoginDoor.CanDrop)
             {
                 TpsMovement movement = GetComponent<TpsMovement>();
                 movement.StopMoving();
@@ -87,52 +92,45 @@ public class PlayerController : MonoBehaviour
                 Quaternion targetRotation = Quaternion.LookRotation(new Vector3(lookDirection.x, 0f, lookDirection.z), Vector3.up);
                 transform.rotation = targetRotation;
                 SetAnimator();
-                isPicking = true;
-                collectablesObj = other.GetComponent<Collectables>();
-                ActiveUIRocks(other.gameObject);
+                IsPicking = true;
+                _collectablesObj = other.GetComponent<Collectables>();
+                StartCoroutine(ActivateRockIE(other.gameObject));
             }
         }
     }
-
 
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Collectables"))
         {
-            isPicking = false;
+            IsPicking = false;
         }
     }
 
-    private void ActiveUIRocks(GameObject other)
+    private IEnumerator ActivateRockIE(GameObject rock)
     {
-
-        if (other.gameObject.name == "Red")
+        string name = rock.gameObject.name;
+        yield return new WaitForSeconds(ActivationDelay);
+        switch (name)
         {
-            gameManager.Red.SetActive(false);
+            case "RED":
+                _gameManager.Red.SetActive(true);
+                break;
+            case "BLUE":
+                _gameManager.Blue.SetActive(true);
+                break;
+            case "GREEN":
+                _gameManager.Green.SetActive(true);
+                break;
+            case "PURPLE":
+                _gameManager.Purple.SetActive(true);
+                break;
+            case "YELLOW":
+                _gameManager.Yellow.SetActive(true);
+                break;
+            default:
+                Debug.LogWarning("Unknown rock color!");
+                break;
         }
-
-        if (other.gameObject.name == "Blue")
-        {
-            gameManager.Blue.SetActive(false);
-        }
-
-
-        if (other.gameObject.name == "Green")
-        {
-            gameManager.Green.SetActive(false);
-        }
-
-
-        if (other.gameObject.name == "Purple")
-        {
-            gameManager.Purple.SetActive(false);
-        }
-
-
-        if (other.gameObject.name == "Yellow")
-        {
-            gameManager.Yellow.SetActive(false);
-        }
-
     }
 }

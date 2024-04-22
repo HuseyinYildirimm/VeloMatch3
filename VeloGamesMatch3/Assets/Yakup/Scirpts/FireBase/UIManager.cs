@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -31,11 +31,6 @@ public class UIManager : MonoBehaviour
     public Text ErrorTxT;
 
 
-    [SerializeField] private GameObject Yellow;
-    [SerializeField] private GameObject Blue;
-    [SerializeField] private GameObject Green;
-    [SerializeField] private GameObject Purple;
-    [SerializeField] private GameObject Red;
 
     private void Awake()
     {

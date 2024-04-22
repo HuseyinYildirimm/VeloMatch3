@@ -5,21 +5,21 @@ public class TpsMovement : MonoBehaviour
     public Animator Anim;
     public float Speed = 2f;
     public float RotationSpeed = 5f;
-    public bool isMoving = true;
+    public bool IsMoving = true;
 
     private Rigidbody rb;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        isMoving = true;
+        IsMoving = true;
     }
 
     void Update()
     {
         Vector3 direction = GetInputDirection();
 
-        if (!isMoving)
+        if (!IsMoving)
             return;
         MoveCharacter(direction);
 
@@ -76,17 +76,17 @@ public class TpsMovement : MonoBehaviour
 
     public void CanMoveTrue()
     {
-        isMoving = true;
+        IsMoving = true;
 
     }
     public void CanMoveFalse()
     {
-        isMoving = false;
+        IsMoving = false;
 
     }
     public void StopMoving()
     {
-        isMoving = false;
+        IsMoving = false;
         Anim.SetBool("Running", false);
         rb.velocity = Vector3.zero;
     }

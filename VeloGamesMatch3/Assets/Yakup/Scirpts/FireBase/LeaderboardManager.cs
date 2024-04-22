@@ -163,7 +163,7 @@ public class LeaderboardManager : MonoBehaviour
             GameObject panel = Instantiate(leaderboardPanelPrefab, leaderboardPanel);
             panel.GetComponent<ScorePF>().NameTxt.text = entry.name;
             panel.GetComponent<ScorePF>().ScoreTxt.text = entry.score.ToString();
-            panel.GetComponent<ScorePF>().LevelTxt.text = "Level: " + entry.level.ToString(); // Seviye eklendi
+            panel.GetComponent<ScorePF>().LevelTxt.text = "Lvl: " + entry.level.ToString(); // Seviye eklendi
         }
     }
 

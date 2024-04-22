@@ -8,7 +8,7 @@ public class ScoreManager : MonoBehaviour
     public LeaderboardManager leaderboardManager;
     public FirebaseAuthManager firebaseAuthManager;
 
-    private void Update()
+    private void Update() 
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
