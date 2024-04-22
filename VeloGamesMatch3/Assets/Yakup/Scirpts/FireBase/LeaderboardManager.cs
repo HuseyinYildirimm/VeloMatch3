@@ -19,6 +19,8 @@ public class LeaderboardManager : MonoBehaviour
     private long previousUserScore = 0;
     private bool isListeningToDatabaseChanges = false;
 
+    public static LeaderboardManager Instance;
+
     private void Start()
     {
         // Firebase bağımlılıklarının kontrol edilmesini bekle
@@ -41,7 +43,7 @@ public class LeaderboardManager : MonoBehaviour
             if (auth.CurrentUser != null)
             {
                 StartListeningToDatabaseChanges();
-                UpdateLeaderboard();
+                StartCoroutine(UpdateLeaderboard());
             }
         }
         else
@@ -98,7 +100,7 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    public void AddScore(string playerName, long score, int level)
+    public void ScoreData(string playerName, long score, int level)
     {
         if (string.IsNullOrEmpty(playerName))
         {
