@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   elementType: 4
-  elementScore: 10
+  elementScore: 15
   xIndex: 0
   yIndex: 0
   isMatched: 0

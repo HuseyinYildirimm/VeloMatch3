@@ -25,6 +25,9 @@ public class ElementBoard : MonoBehaviour
     public int maxIndex = 8;
     public float durationSpeed;
     public float processedDelay = 0.2f;
+
+    [Header("Boom")]
+    public int boomScore;
     public float boomThreshold;
 
     [Space(10)]
@@ -67,7 +70,7 @@ public class ElementBoard : MonoBehaviour
 
         //What position will the board be on the camera?
         SpacingX = (float)(Width - 1) / 2;
-        SpacingY = (float)(Height - 1) / 2;
+        SpacingY = (float)(Height - 1) / 2-1;
 
         for (int y = 0; y < Height; y++)
         {
@@ -169,6 +172,14 @@ public class ElementBoard : MonoBehaviour
             }
         }
         return hasMatched;
+    }
+
+    public void BoardCleaning()
+    {
+        foreach  (Transform child in ElementParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     public IEnumerator ProcessTurnOnMatchedBoard(bool _subtractMoves)
@@ -391,7 +402,7 @@ public class ElementBoard : MonoBehaviour
     {
         List<Element> connectedElements = new();
         ElementType elementType = element.elementType;
-
+        int score = element.elementScore * LevelManager1.Instance.currentLevel;
         connectedElements.Add(element);
 
         CheckDirection(element, new Vector2Int(1, 0), connectedElements);
@@ -400,7 +411,8 @@ public class ElementBoard : MonoBehaviour
         if (connectedElements.Count == 3)
         {
             Debug.Log("Match Horizontal " + connectedElements[0].elementType);
-            GameManager1.Instance.score += element.elementScore;
+            GameManager1.Instance.score += score;
+            GameManager1.Instance.ScoreSave();
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -410,7 +422,7 @@ public class ElementBoard : MonoBehaviour
         else if (connectedElements.Count > 3)
         {
             Debug.Log("Match Long Horizontal " + connectedElements[0].elementType);
-            GameManager1.Instance.score += element.elementScore * 2;
+            GameManager1.Instance.score += score * 2;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -427,7 +439,7 @@ public class ElementBoard : MonoBehaviour
         if (connectedElements.Count == 3)
         {
             Debug.Log("Match Vertical " + connectedElements[0].elementType);
-            GameManager1.Instance.score += element.elementScore;
+            GameManager1.Instance.score += score;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -437,7 +449,7 @@ public class ElementBoard : MonoBehaviour
         else if (connectedElements.Count > 3)
         {
             Debug.Log("Match Long Vertical " + connectedElements[0].elementType);
-            GameManager1.Instance.score += element.elementScore * 2;
+            GameManager1.Instance.score += score * 2;
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -525,7 +537,7 @@ public class ElementBoard : MonoBehaviour
 
         isProcessingMove = true;
 
-        StartCoroutine(GameManager1.Instance.SwapRightAmount(durationSpeed));
+        StartCoroutine(GameManager1.Instance.SwapRightAmount());
 
         StartCoroutine(ProcessMatches(_currentElement, _targetElement));
 
@@ -586,6 +598,8 @@ public class ElementBoard : MonoBehaviour
 
     private void BoomExplode(int xIndex, int yIndex)
     {
+        GameManager1.Instance.score += boomScore;
+
         // Explode elements in the same row
         for (int x = 0; x < Width; x++)
         {
@@ -611,9 +625,9 @@ public class ElementBoard : MonoBehaviour
 
     private IEnumerator ExplodeAfterSwap(Element _currentElement, Element _targetElement)
     {
-        yield return new WaitForSeconds(processedDelay); // Swap iþlemi tamamlandýktan sonra bir süre bekle
+        yield return new WaitForSeconds(processedDelay); // Wait for a while after the swap process is completed
 
-        // Boom elementlerinin olduðu satýr ve sütunlarý patlat
+        // Explode rows and columns containing boom elements
         if (_currentElement.elementType == ElementType.Boom)
         {
             BoomExplode(_targetElement.xIndex, _targetElement.yIndex);

@@ -33,6 +33,8 @@ public class FirebaseAuthManager : MonoBehaviour
 
     private string defaultUserImage = "https://www.esportimes.com/wp-content/uploads/2022/08/esportimeslogo-optimized.png";
 
+    public static FirebaseAuthManager Instance;
+
     private void Start()
     {
         // Firebase bağımlılıklarını başlat
