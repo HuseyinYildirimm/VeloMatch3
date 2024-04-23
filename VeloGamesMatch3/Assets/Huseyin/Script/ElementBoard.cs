@@ -37,13 +37,13 @@ public class ElementBoard : MonoBehaviour
 
     public static ElementBoard Instance;
 
-    GameAudioManager audioManager;
+    //GameAudioManager audioManager;
 
     public void Awake()
     {
         Instance = this;
 
-        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<GameAudioManager>();
+        //audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<GameAudioManager>();
     }
 
     public void Update()
@@ -169,7 +169,7 @@ public class ElementBoard : MonoBehaviour
                                     e.isMatched = true;
 
                                 hasMatched = true;
-                                audioManager.PlaySFX(audioManager.stone);
+                               // audioManager.PlaySFX(audioManager.stone);
                             }
                         }
                     }
@@ -417,7 +417,6 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Horizontal " + connectedElements[0].elementType);
             GameManager1.Instance.score += score;
-            GameManager1.Instance.ScoreSave();
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -428,7 +427,6 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Long Horizontal " + connectedElements[0].elementType);
             GameManager1.Instance.score += score * 2;
-            GameManager1.Instance.ScoreSave();
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -446,7 +444,6 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Vertical " + connectedElements[0].elementType);
             GameManager1.Instance.score += score;
-            GameManager1.Instance.ScoreSave();
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -457,7 +454,6 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Long Vertical " + connectedElements[0].elementType);
             GameManager1.Instance.score += score * 2;
-             GameManager1.Instance.ScoreSave();
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -615,7 +611,7 @@ public class ElementBoard : MonoBehaviour
             if (elementToExplode != null && !elementToExplode.isMatched)
             {
                 elementsToRemove.Add(elementToExplode);
-                audioManager.PlaySFX(audioManager.dynamite);
+               // audioManager.PlaySFX(audioManager.dynamite);
             }
         }
 
@@ -626,7 +622,7 @@ public class ElementBoard : MonoBehaviour
             if (elementToExplode != null && !elementToExplode.isMatched)
             {
                 elementsToRemove.Add(elementToExplode);
-                audioManager.PlaySFX(audioManager.dynamite);
+                //audioManager.PlaySFX(audioManager.dynamite);
             }
         }
 

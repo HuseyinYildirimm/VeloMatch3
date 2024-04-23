@@ -1,12 +1,8 @@
 using System.Collections;
 using UnityEngine;
-using Firebase;
 using Firebase.Database;
-using UnityEngine.UI;
 using Firebase.Auth;
 using System;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Collections.Generic;
 
 [System.Serializable]
@@ -21,14 +17,15 @@ public class Level
 public class LevelManager1 : MonoBehaviour
 {
     public static LevelManager1 Instance;
-    public int currentLevel;
     DatabaseReference databaseReference;
     [SerializeField] private List<Level> levels;
+
+    public int currentLevel = 1;
 
     private void Awake()
     {
         Instance = this;
-        databaseReference = FirebaseDatabase.DefaultInstance.RootReference; 
+        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
     private void Start()
@@ -68,7 +65,6 @@ public class LevelManager1 : MonoBehaviour
         {
             UnlockLevel(currentLevel + 1);
         }
-
     }
 
     public void UnlockLevel(int _levelID)
@@ -84,11 +80,9 @@ public class LevelManager1 : MonoBehaviour
     public bool IsLevelLocked(int _levelID)
     {
         Level tempLevel = levels.Find(level => level.levelID == _levelID);
-
         if (tempLevel != null)
         {
             return tempLevel.isLocked;
-
         }
         return false;
     }
@@ -104,7 +98,6 @@ public class LevelManager1 : MonoBehaviour
     public bool PassedScore()
     {
         Level tempLevel = levels.Find(level => level.levelID == currentLevel);
-
         if (tempLevel != null)
         {
             return GameManager1.Instance.score >= tempLevel.levelScore;

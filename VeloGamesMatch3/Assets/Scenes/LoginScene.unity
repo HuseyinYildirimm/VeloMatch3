@@ -1866,11 +1866,6 @@ MonoBehaviour:
   profileImage: {fileID: 986141355}
   urlInputField: {fileID: 432845267}
   ErrorTxT: {fileID: 1453314735}
-  Yellow: {fileID: 0}
-  Blue: {fileID: 0}
-  Green: {fileID: 0}
-  Purple: {fileID: 0}
-  Red: {fileID: 0}
 --- !u!1 &516433468
 GameObject:
   m_ObjectHideFlags: 0

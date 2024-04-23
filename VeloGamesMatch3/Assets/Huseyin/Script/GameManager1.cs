@@ -58,6 +58,7 @@ public class GameManager1 : MonoBehaviour
     public void PassedLevel()
     {
         LevelFrame.SetActive(true);
+        ScoreSave();
     }
 
     public void GameAgain()
@@ -78,12 +79,14 @@ public class GameManager1 : MonoBehaviour
         if (firebaseAuthManager != null && firebaseAuthManager.auth != null && firebaseAuthManager.auth.CurrentUser != null)
         {
             leaderboardManager = FindAnyObjectByType<LeaderboardManager>();
-            leaderboardManager.ScoreData(firebaseAuthManager.auth.CurrentUser.DisplayName, score, LevelManager1.Instance.currentLevel);
-            StartCoroutine(LeaderboardManager.Instance.UpdateLeaderboard());
+            leaderboardManager.ScoreData(firebaseAuthManager.auth.CurrentUser.DisplayName, score, LevelManager1.Instance.currentLevel +1 );
+           // StartCoroutine(LeaderboardManager.Instance.UpdateLeaderboard());
         }
         else
         {
             Debug.LogWarning("FirebaseAuthManager is not initialized or there is no authenticated user.");
         }
     }
+
+    
 }

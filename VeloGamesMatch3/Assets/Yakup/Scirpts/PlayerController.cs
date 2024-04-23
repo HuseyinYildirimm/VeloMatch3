@@ -14,11 +14,11 @@ public class PlayerController : MonoBehaviour
 
     private Collectables _collectablesObj;
     private GameManager _gameManager;
-    OpeningAudioManager audioManager;
+   // OpeningAudioManager audioManager;
 
     private void Awake()
     {
-        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<OpeningAudioManager>();
+        //audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<OpeningAudioManager>();
 
     }
     private void Start()
@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
                 .OnComplete(() =>
                 {
                     Debug.Log("Collect");
-                    audioManager.PlaySFX(audioManager.gem1);
+                    //audioManager.PlaySFX(audioManager.gem1);
                     CaveLoginDoor.CanDrop = true;
                     IsPicking = false;
                 });
