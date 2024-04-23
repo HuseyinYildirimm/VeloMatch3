@@ -7875,9 +7875,9 @@ MonoBehaviour:
   UniqueRockPositions:
   - {fileID: 303349899}
   - {fileID: 1654792075}
-  - {fileID: 817245715}
   - {fileID: 1451490766}
   - {fileID: 943933561}
+  - {fileID: 817245715}
   Waypoints:
   - {fileID: 860471064121543726}
   - {fileID: 989477324}

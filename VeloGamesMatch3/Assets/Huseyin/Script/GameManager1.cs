@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class GameManager1 : MonoBehaviour
 {
     public static GameManager1 Instance;
-
+    FirebaseAuthManager firebaseAuthManager;
+    LeaderboardManager leaderboardManager;
     public GameObject GameAgainButton;
     public GameObject PassedLevelButton;
     public GameObject LevelFrame;
@@ -19,18 +20,18 @@ public class GameManager1 : MonoBehaviour
     public int swapRight;
 
     public float delay;
-    [HideInInspector] public BoxCollider2D collider2D;
+    [HideInInspector] public BoxCollider2D Collider2D;
 
 
     public void Awake()
     {
         Instance = this;
-        collider2D = GetComponent<BoxCollider2D>();
+        Collider2D = GetComponent<BoxCollider2D>();
     }
 
     public void Start()
     {
-        collider2D.enabled = false;
+        Collider2D.enabled = false;
         GameAgainButton.SetActive(false);
         PassedLevelButton.SetActive(false);
     }
@@ -40,7 +41,7 @@ public class GameManager1 : MonoBehaviour
         SwapRightText.text = swapRight.ToString();
         ScoreText.text = score.ToString();
 
-        if(swapRight <= 0)
+        if (swapRight <= 0)
         {
             swapRight = 0;
             GameAgainButton.SetActive(true);
@@ -50,7 +51,7 @@ public class GameManager1 : MonoBehaviour
         if (LevelManager1.Instance.PassedScore())
         {
             PassedLevelButton.SetActive(true);
-            collider2D.enabled = true;
+            Collider2D.enabled = true;
         }
     }
 
@@ -72,13 +73,13 @@ public class GameManager1 : MonoBehaviour
 
     public void ScoreSave()
     {
-        FirebaseAuthManager firebaseAuthManager = FirebaseAuthManager.Instance;
-        LeaderboardManager leaderboardManager = LeaderboardManager.Instance;
+        firebaseAuthManager = FindAnyObjectByType<FirebaseAuthManager>();
+
         if (firebaseAuthManager != null && firebaseAuthManager.auth != null && firebaseAuthManager.auth.CurrentUser != null)
         {
-            // firebaseAuthManager.auth.CurrentUser.DisplayName deðerini kullanarak bir oyuncu skoru ekleyin
-            leaderboardManager.ScoreData(firebaseAuthManager.auth.CurrentUser.DisplayName, score , LevelManager1.Instance.currentLevel);
-            StartCoroutine(leaderboardManager.UpdateLeaderboard());
+            leaderboardManager = FindAnyObjectByType<LeaderboardManager>();
+            leaderboardManager.ScoreData(firebaseAuthManager.auth.CurrentUser.DisplayName, score, LevelManager1.Instance.currentLevel);
+            StartCoroutine(LeaderboardManager.Instance.UpdateLeaderboard());
         }
         else
         {

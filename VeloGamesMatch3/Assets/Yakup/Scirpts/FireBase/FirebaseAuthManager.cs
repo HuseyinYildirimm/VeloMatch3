@@ -35,6 +35,24 @@ public class FirebaseAuthManager : MonoBehaviour
 
     public static FirebaseAuthManager Instance;
 
+    private static FirebaseAuthManager instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            // İlk oluşturulan örneği işaretle
+            instance = this;
+
+            // Bu nesnenin yok edilmemesini sağla
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            // Birden fazla örnek oluşursa bu nesneyi yok et
+            Destroy(gameObject);
+        }
+    }
     private void Start()
     {
         // Firebase bağımlılıklarını başlat

@@ -27,7 +27,7 @@ public class LevelButton : MonoBehaviour
     private void OnButtonClick()
     {
         ElementBoard.Instance.BoardCleaning();
-        GameManager1.Instance.collider2D.enabled = false;
+        GameManager1.Instance.GetComponent<Collider2D>().enabled = false;
         ElementBoard.Instance.InitializeBoard(rows, colums);
         LevelManager1.Instance.currentLevel = levelID;
         LevelManager1.Instance.SwapByLevel(levelID);

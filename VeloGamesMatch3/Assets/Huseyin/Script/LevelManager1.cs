@@ -1,6 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Firebase;
+using Firebase.Database;
+using UnityEngine.UI;
+using Firebase.Auth;
+using System;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class Level
@@ -15,19 +22,44 @@ public class LevelManager1 : MonoBehaviour
 {
     public static LevelManager1 Instance;
     public int currentLevel;
-
+    DatabaseReference databaseReference;
     [SerializeField] private List<Level> levels;
 
     private void Awake()
     {
         Instance = this;
+        databaseReference = FirebaseDatabase.DefaultInstance.RootReference; 
+    }
+
+    private void Start()
+    {
+        StartCoroutine(InitializeLevel());
+    }
+
+    IEnumerator InitializeLevel()
+    {
+        string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+        var getUserLevelTask = databaseReference.Child("scores").Child(userId).Child("level").GetValueAsync();
+        yield return new WaitUntil(() => getUserLevelTask.IsCompleted);
+
+        if (getUserLevelTask.Exception != null)
+        {
+            Debug.LogError(getUserLevelTask.Exception);
+            yield break;
+        }
+
+        DataSnapshot userLevelSnapshot = getUserLevelTask.Result;
+        if (userLevelSnapshot.Exists)
+        {
+            int playerLevel = Convert.ToInt32(userLevelSnapshot.Value);
+            currentLevel = playerLevel;
+        }
 
         for (int i = 0; i < currentLevel; i++)
         {
             levels[i].isLocked = false;
         }
     }
-
     public void Update()
     {
         Level temp = levels.Find(level => level.levelID == currentLevel);
@@ -73,7 +105,7 @@ public class LevelManager1 : MonoBehaviour
     {
         Level tempLevel = levels.Find(level => level.levelID == currentLevel);
 
-        if(tempLevel != null)
+        if (tempLevel != null)
         {
             return GameManager1.Instance.score >= tempLevel.levelScore;
         }

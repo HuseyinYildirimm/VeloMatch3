@@ -18,28 +18,43 @@ public class LeaderboardManager : MonoBehaviour
     FirebaseAuth auth;
     private long previousUserScore = 0;
     private bool isListeningToDatabaseChanges = false;
+    private int rankCounter = 1;
+
 
     public static LeaderboardManager Instance;
 
+    private void Awake()
+    {
+
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     private void Start()
     {
-        // Firebase bağımlılıklarının kontrol edilmesini bekle
+
         StartCoroutine(InitializeFirebase());
     }
 
     IEnumerator InitializeFirebase()
     {
-        // Firebase bağımlılıklarının kontrol edilmesini bekle
+
         var dependencyTask = FirebaseApp.CheckAndFixDependenciesAsync();
         yield return new WaitUntil(() => dependencyTask.IsCompleted);
 
-        // Bağımlılıklar başarıyla kontrol edildiyse Firebase veritabanı referansını al
+
         if (dependencyTask.Result == DependencyStatus.Available)
         {
             auth = FirebaseAuth.DefaultInstance;
             databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
 
-            // Kullanıcı oturum açıkken sadece onun skorlarını güncelle
+
             if (auth.CurrentUser != null)
             {
                 StartListeningToDatabaseChanges();
@@ -109,7 +124,7 @@ public class LeaderboardManager : MonoBehaviour
             return;
         }
 
-        ScoreEntry newEntry = new ScoreEntry(playerName, score, auth.CurrentUser.UserId, level); // Seviye eklendi
+        ScoreEntry newEntry = new ScoreEntry(playerName, score, auth.CurrentUser.UserId, level);
         UpdateUserScore(newEntry);
     }
 
@@ -140,12 +155,13 @@ public class LeaderboardManager : MonoBehaviour
             Debug.LogError(getScoresTask.Exception);
             yield break;
         }
-
-        foreach (Transform child in leaderboardPanel)
+        if (leaderboardPanel != null)
         {
-            Destroy(child.gameObject);
+            foreach (Transform child in leaderboardPanel)
+            {
+                Destroy(child.gameObject);
+            }
         }
-
         DataSnapshot snapshot = getScoresTask.Result;
         List<ScoreEntry> scoreEntries = new List<ScoreEntry>();
 
@@ -154,18 +170,22 @@ public class LeaderboardManager : MonoBehaviour
             string playerName = childSnapshot.Child("name").Value.ToString();
             long playerScore = (long)childSnapshot.Child("score").Value;
             string userId = childSnapshot.Key;
-            int playerLevel = Convert.ToInt32(childSnapshot.Child("level").Value); // Seviye eklendi
-            scoreEntries.Add(new ScoreEntry(playerName, playerScore, userId, playerLevel)); // Seviye eklendi
+            int playerLevel = Convert.ToInt32(childSnapshot.Child("level").Value);
+            scoreEntries.Add(new ScoreEntry(playerName, playerScore, userId, playerLevel));
         }
 
         scoreEntries = scoreEntries.OrderByDescending(entry => entry.score).ToList();
 
+        rankCounter = 1;
         foreach (var entry in scoreEntries)
         {
+
             GameObject panel = Instantiate(leaderboardPanelPrefab, leaderboardPanel);
+            panel.GetComponent<ScorePF>().RankTxt.text = rankCounter.ToString()+".";
             panel.GetComponent<ScorePF>().NameTxt.text = entry.name;
             panel.GetComponent<ScorePF>().ScoreTxt.text = entry.score.ToString();
-            panel.GetComponent<ScorePF>().LevelTxt.text = "Lvl: " + entry.level.ToString(); // Seviye eklendi
+            panel.GetComponent<ScorePF>().LevelTxt.text = "Lvl: " + entry.level.ToString();
+            rankCounter++;
         }
     }
 

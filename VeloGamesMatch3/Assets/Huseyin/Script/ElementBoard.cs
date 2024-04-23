@@ -70,7 +70,7 @@ public class ElementBoard : MonoBehaviour
 
         //What position will the board be on the camera?
         SpacingX = (float)(Width - 1) / 2;
-        SpacingY = (float)(Height - 1) / 2-1;
+        SpacingY = (float)(Height - 1) / 2 - 1;
 
         for (int y = 0; y < Height; y++)
         {
@@ -176,7 +176,7 @@ public class ElementBoard : MonoBehaviour
 
     public void BoardCleaning()
     {
-        foreach  (Transform child in ElementParent.transform)
+        foreach (Transform child in ElementParent.transform)
         {
             Destroy(child.gameObject);
         }
@@ -423,6 +423,7 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Long Horizontal " + connectedElements[0].elementType);
             GameManager1.Instance.score += score * 2;
+            GameManager1.Instance.ScoreSave();
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -440,6 +441,7 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Vertical " + connectedElements[0].elementType);
             GameManager1.Instance.score += score;
+            GameManager1.Instance.ScoreSave();
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -450,6 +452,7 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Long Vertical " + connectedElements[0].elementType);
             GameManager1.Instance.score += score * 2;
+             GameManager1.Instance.ScoreSave();
             return new MatchResult
             {
                 connectedElements = connectedElements,
