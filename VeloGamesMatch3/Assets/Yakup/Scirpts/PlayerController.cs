@@ -14,7 +14,13 @@ public class PlayerController : MonoBehaviour
 
     private Collectables _collectablesObj;
     private GameManager _gameManager;
+    OpeningAudioManager audioManager;
 
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<OpeningAudioManager>();
+
+    }
     private void Start()
     {
         _gameManager = FindAnyObjectByType<GameManager>();
@@ -36,6 +42,7 @@ public class PlayerController : MonoBehaviour
                 .OnComplete(() =>
                 {
                     Debug.Log("Collect");
+                    audioManager.PlaySFX(audioManager.gem1);
                     CaveLoginDoor.CanDrop = true;
                     IsPicking = false;
                 });
