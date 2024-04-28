@@ -52,10 +52,21 @@ public class LevelManager1 : MonoBehaviour
             currentLevel = playerLevel;
         }
 
-        for (int i = 0; i < currentLevel; i++)
+        if (levels.Count > currentLevel)
         {
-            levels[i].isLocked = false;
+            for (int i = 0; i < currentLevel; i++)
+            {
+                levels[i].isLocked = false;
+            }
         }
+        else
+        {
+            for (int i = 0; i < levels.Count; i++)
+            {
+                levels[i].isLocked = false;
+            }
+        }
+
     }
     public void Update()
     {

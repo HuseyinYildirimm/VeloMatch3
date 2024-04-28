@@ -1317,7 +1317,7 @@ Transform:
   m_GameObject: {fileID: 267376768}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.08, y: 1.1611187, z: 8.42}
+  m_LocalPosition: {x: 5.08, y: 0.69, z: 8.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8665,7 +8665,7 @@ PrefabInstance:
     - target: {fileID: 936173908287268505, guid: 2bc90b7b7b8bf754a8d7837f8a35ea56,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.075
       objectReference: {fileID: 0}
     - target: {fileID: 936173908287268505, guid: 2bc90b7b7b8bf754a8d7837f8a35ea56,
         type: 3}
@@ -8925,7 +8925,7 @@ PrefabInstance:
     - target: {fileID: 4046846707696539597, guid: 7f00afdbbe0d9b047942e09bda82d9d5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.202
       objectReference: {fileID: 0}
     - target: {fileID: 4046846707696539597, guid: 7f00afdbbe0d9b047942e09bda82d9d5,
         type: 3}
@@ -9079,11 +9079,6 @@ PrefabInstance:
     - target: {fileID: 2983314873986367682, guid: 255233c800d88134bb06e420f9a02792,
         type: 3}
       propertyPath: CaveLoginDoor
-      value: 
-      objectReference: {fileID: 1946762617}
-    - target: {fileID: 2983314873986367682, guid: 255233c800d88134bb06e420f9a02792,
-        type: 3}
-      propertyPath: caveLoginDoor
       value: 
       objectReference: {fileID: 1946762617}
     m_RemovedComponents: []
@@ -9426,7 +9421,7 @@ PrefabInstance:
     - target: {fileID: 1785591790639573128, guid: 0c84ecd1e0a60a544a63b97854947970,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.305
+      value: -0.089
       objectReference: {fileID: 0}
     - target: {fileID: 1785591790639573128, guid: 0c84ecd1e0a60a544a63b97854947970,
         type: 3}
@@ -9543,12 +9538,12 @@ PrefabInstance:
     - target: {fileID: 2751896905220175250, guid: 60a3cad2145ac974bae3dd7f5bc8bc1a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.81
+      value: 8.99
       objectReference: {fileID: 0}
     - target: {fileID: 2751896905220175250, guid: 60a3cad2145ac974bae3dd7f5bc8bc1a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.314
+      value: -0.012
       objectReference: {fileID: 0}
     - target: {fileID: 2751896905220175250, guid: 60a3cad2145ac974bae3dd7f5bc8bc1a,
         type: 3}
