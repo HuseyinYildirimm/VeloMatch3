@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using System.Security.Policy;
 using System;
+using Firebase.Database;
+using System.Collections.Generic;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -41,15 +43,15 @@ public class FirebaseAuthManager : MonoBehaviour
     {
         if (instance == null)
         {
-            // İlk oluşturulan örneği işaretle
+           
             instance = this;
 
-            // Bu nesnenin yok edilmemesini sağla
+           
             DontDestroyOnLoad(gameObject);
         }
         else
         {
-            // Birden fazla örnek oluşursa bu nesneyi yok et
+           
             Destroy(gameObject);
         }
     }
@@ -100,6 +102,7 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
+
     private void AutoLogin()
     {
         if (user != null)
@@ -108,6 +111,8 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 References.userName = user.DisplayName;
                 UIManager.Instance.OpenGamePanel();
+                string name = user.DisplayName;
+                UIManager.Instance.NameTxt.text = string.Format("Welcome," + name + " Are you ready ?");
 
                 // Check if PhotoUrl is not null before converting it to string
                 if (user.PhotoUrl != null && !string.IsNullOrEmpty(user.PhotoUrl.ToString()))
@@ -215,7 +220,8 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 References.userName = user.DisplayName;
                 UIManager.Instance.OpenGamePanel();
-
+                string name = user.DisplayName;
+                UIManager.Instance.NameTxt.text = string.Format("Welcome," + name + " Are you ready ?");
                 if (!string.IsNullOrEmpty(user.PhotoUrl.ToString()))
                 {
                     UIManager.Instance.LoadProfileImage(user.PhotoUrl.ToString());

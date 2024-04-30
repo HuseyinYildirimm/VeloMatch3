@@ -33,26 +33,6 @@ public class TpsMovement : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
 
 
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            Vector2 touchPosition = touch.position;
-
-
-            if (touchPosition.x < Screen.width / 2)
-                horizontal += -1f;
-
-            else if (touchPosition.x > Screen.width / 2)
-                horizontal += 1f;
-
-
-            if (touchPosition.y > Screen.height / 2)
-                vertical += 1f;
-
-            else if (touchPosition.y < Screen.height / 2)
-                vertical += -1f;
-        }
-
         return new Vector3(horizontal, 0f, vertical).normalized;
     }
 

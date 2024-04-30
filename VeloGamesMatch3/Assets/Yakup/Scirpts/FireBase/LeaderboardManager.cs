@@ -14,7 +14,7 @@ public class LeaderboardManager : MonoBehaviour
     public Transform leaderboardPanel;
     public GameObject leaderboardPanelPrefab;
 
-    DatabaseReference databaseReference;
+   public DatabaseReference databaseReference;
     FirebaseAuth auth;
     private long previousUserScore = 0;
     private bool isListeningToDatabaseChanges = false;
@@ -175,7 +175,7 @@ public class LeaderboardManager : MonoBehaviour
         }
 
         scoreEntries = scoreEntries.OrderByDescending(entry => entry.score).ToList();
-
+        
         rankCounter = 1;
         foreach (var entry in scoreEntries)
         {

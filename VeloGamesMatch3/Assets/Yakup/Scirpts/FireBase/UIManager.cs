@@ -27,11 +27,10 @@ public class UIManager : MonoBehaviour
     public Image profileImage;
     public InputField urlInputField;
 
-
+    public Text NameTxt;
     public Text ErrorTxT;
 
-
-
+        
     private void Awake()
     {
         CreateInstance();
