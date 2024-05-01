@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     }
     public void GoToMenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("LoginScene");
     }
 
 }

@@ -37,28 +37,36 @@ public class FirebaseAuthManager : MonoBehaviour
 
     public static FirebaseAuthManager Instance;
 
-    private static FirebaseAuthManager instance;
-
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-           
-            instance = this;
-
-           
+            Instance = this;
             DontDestroyOnLoad(gameObject);
+            InitializeFirebase();
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
-           
             Destroy(gameObject);
         }
     }
+
     private void Start()
     {
         // Firebase bağımlılıklarını başlat
         StartCoroutine(CheckAndFixDependenciesAsync());
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Instance = null;
     }
 
     private IEnumerator CheckAndFixDependenciesAsync()
@@ -101,7 +109,6 @@ public class FirebaseAuthManager : MonoBehaviour
             UIManager.Instance.OpenLoginPanel();
         }
     }
-
 
     private void AutoLogin()
     {
@@ -161,6 +168,7 @@ public class FirebaseAuthManager : MonoBehaviour
 
     public void Login()
     {
+        if(emailLoginField != null && passwordLoginField != null) 
         StartCoroutine(LoginAsync(emailLoginField.text, passwordLoginField.text));
     }
 
@@ -169,6 +177,8 @@ public class FirebaseAuthManager : MonoBehaviour
         if (auth != null && user != null)
         {
             auth.SignOut();
+            Instance = null;
+            Destroy(gameObject);
         }
     }
 
@@ -431,7 +441,13 @@ public class FirebaseAuthManager : MonoBehaviour
 
     public void OpenGameScene()
     {
-        SceneManager.LoadScene(1);
-
+        if (user != null)
+        {
+            SceneManager.LoadScene(1);
+        }
+        else
+        {
+            UIManager.Instance.OpenLoginPanel();
+        }
     }
 }

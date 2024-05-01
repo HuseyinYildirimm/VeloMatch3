@@ -2198,6 +2198,79 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602432140}
   m_CullTransparentMesh: 1
+--- !u!1 &653877215
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 653877217}
+  - component: {fileID: 653877216}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &653877216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653877215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ab1b63e9358f8f4abb81753ca92d449, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - clip: {fileID: 8300000, guid: e2b8e48b56586054a88cc64ed099a61f, type: 3}
+    source: {fileID: 0}
+    audioName: Main
+    volume: 1
+    spetialBlend: 0
+    pitch: 1
+    loop: 1
+  - clip: {fileID: 8300000, guid: f181fec1b20781f47bd762047c001537, type: 3}
+    source: {fileID: 0}
+    audioName: Button
+    volume: 0.5
+    spetialBlend: 0
+    pitch: 1
+    loop: 0
+  - clip: {fileID: 8300000, guid: 0df92e5523a40bb4b88935b861d9141f, type: 3}
+    source: {fileID: 0}
+    audioName: Match
+    volume: 1
+    spetialBlend: 0
+    pitch: 1
+    loop: 0
+  - clip: {fileID: 8300000, guid: c1e016fd7823f54438f11939a0bb77ff, type: 3}
+    source: {fileID: 0}
+    audioName: Win
+    volume: 1
+    spetialBlend: 0
+    pitch: 1
+    loop: 0
+--- !u!4 &653877217
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653877215}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.616601, y: 4.4274936, z: 364.85306}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &665680394
 GameObject:
   m_ObjectHideFlags: 0
@@ -3236,6 +3309,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 653877216}
+        m_TargetAssemblyTypeName: GameAudioManager, Assembly-CSharp
+        m_MethodName: ButtonPlay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &990260368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3881,6 +3966,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 653877216}
+        m_TargetAssemblyTypeName: GameAudioManager, Assembly-CSharp
+        m_MethodName: ButtonPlay
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6744,6 +6841,7 @@ SceneRoots:
   - {fileID: 1040871383}
   - {fileID: 416424281}
   - {fileID: 1074337659}
+  - {fileID: 653877217}
   - {fileID: 798573152}
   - {fileID: 596856492}
   - {fileID: 950977107}

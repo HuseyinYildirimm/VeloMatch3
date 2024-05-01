@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance;
+    public static UIManager Instance { get; private set; }
+
 
     [SerializeField] private GameObject loginPanel;
 
@@ -30,7 +31,19 @@ public class UIManager : MonoBehaviour
     public Text NameTxt;
     public Text ErrorTxT;
 
-        
+    [Header("Login")]
+    public InputField emailLoginField;
+    public InputField passwordLoginField;
+
+    // Registration Variables
+    [Space]
+    [Header("Registration")]
+    public InputField nameRegisterField;
+    public InputField emailRegisterField;
+    public InputField passwordRegisterField;
+    public InputField confirmPasswordRegisterField;
+
+
     private void Awake()
     {
         CreateInstance();
@@ -41,6 +54,10 @@ public class UIManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 

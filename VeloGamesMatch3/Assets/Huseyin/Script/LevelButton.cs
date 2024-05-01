@@ -31,6 +31,8 @@ public class LevelButton : MonoBehaviour
         ElementBoard.Instance.InitializeBoard(rows, colums);
         LevelManager1.Instance.currentLevel = levelID;
         LevelManager1.Instance.SwapByLevel(levelID);
+
+        GameAudioManager.Instance.ButtonSound();
     }
 
     void UnlockedLevel()

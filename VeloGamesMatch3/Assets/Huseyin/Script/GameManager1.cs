@@ -21,6 +21,7 @@ public class GameManager1 : MonoBehaviour
 
     public float delay;
     [HideInInspector] public BoxCollider2D Collider2D;
+    bool passed;
 
 
     public void Awake()
@@ -48,8 +49,9 @@ public class GameManager1 : MonoBehaviour
             ElementBoard.Instance.isProcessingMove = false;
         }
 
-        if (LevelManager1.Instance.PassedScore())
+        if (LevelManager1.Instance.PassedScore() && !passed)
         {
+            GameAudioManager.Instance.WinSound();
             PassedLevelButton.SetActive(true);
             Collider2D.enabled = true;
         }

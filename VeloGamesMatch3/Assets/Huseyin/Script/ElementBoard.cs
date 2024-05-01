@@ -417,6 +417,8 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Horizontal " + connectedElements[0].elementType);
             GameManager1.Instance.score += score;
+            GameAudioManager.Instance.MatchSound();
+
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -427,6 +429,8 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Long Horizontal " + connectedElements[0].elementType);
             GameManager1.Instance.score += score * 2;
+            GameAudioManager.Instance.MatchSound();
+
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -444,6 +448,8 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Vertical " + connectedElements[0].elementType);
             GameManager1.Instance.score += score;
+            GameAudioManager.Instance.MatchSound();
+
             return new MatchResult
             {
                 connectedElements = connectedElements,
@@ -454,6 +460,8 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Long Vertical " + connectedElements[0].elementType);
             GameManager1.Instance.score += score * 2;
+            GameAudioManager.Instance.MatchSound();
+
             return new MatchResult
             {
                 connectedElements = connectedElements,
