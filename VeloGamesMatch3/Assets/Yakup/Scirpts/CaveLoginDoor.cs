@@ -6,14 +6,16 @@ using UnityEngine.SceneManagement;
 
 public class CaveLoginDoor : MonoBehaviour
 {
+    [SerializeField] private Animation _animationDoors;
     [SerializeField] private GameObject _collectedParticle;
     [SerializeField] private Animation _animationCircle;
-    [SerializeField] private Animation _animationDoors;
-
+    [SerializeField] private OpeningAudioManager _openingAudioManager;
     [SerializeField] private CinemachineVirtualCamera _virtualCamera;
+
+    [SerializeField] private PlayerController _playerController;
     public Transform[] UniqueRockPositions;
     public Transform[] Waypoints;
-    private PlayerController _playerController;
+
     public int RockPointCount = 0;
     public bool CanDrop = false;
     private const float MoveDuration = 2f;
@@ -29,7 +31,6 @@ public class CaveLoginDoor : MonoBehaviour
     {
         CanDrop = false;
         _collectedParticle.SetActive(true);
-        _playerController = FindAnyObjectByType<PlayerController>();
     }
 
     public void OpenCaveDoorAnimations(Transform player)
@@ -40,8 +41,10 @@ public class CaveLoginDoor : MonoBehaviour
     IEnumerator OpenCaveDoorAnimationsIE(Transform player)
     {
         _animationCircle.Play("CaveLoginOpen");
+        _openingAudioManager.Boom();
         yield return new WaitForSeconds(2);
         _animationCircle.Play("DownDoor");
+        _openingAudioManager.Win();
         yield return new WaitForSeconds(2);
         _animationDoors.Play();
         yield return new WaitForSeconds(2);

@@ -14,7 +14,7 @@ public class LeaderboardManager : MonoBehaviour
     public Transform leaderboardPanel;
     public GameObject leaderboardPanelPrefab;
 
-   public DatabaseReference databaseReference;
+    public DatabaseReference databaseReference;
     FirebaseAuth auth;
     private long previousUserScore = 0;
     private bool isListeningToDatabaseChanges = false;
@@ -57,7 +57,7 @@ public class LeaderboardManager : MonoBehaviour
             if (auth.CurrentUser != null)
             {
                 StartListeningToDatabaseChanges();
-                StartCoroutine(UpdateLeaderboard());
+                StartCoroutine(UpdateLeaderboard(leaderboardPanel, leaderboardPanelPrefab));
             }
         }
         else
@@ -70,7 +70,11 @@ public class LeaderboardManager : MonoBehaviour
 
     public void UpdateLB()
     {
-        StartCoroutine(UpdateLeaderboard());
+        StartCoroutine(UpdateLeaderboard(leaderboardPanel, leaderboardPanelPrefab));
+    }
+    public void UpdateLBAttributes(Transform leaderboardPanel, GameObject leaderboardPanelPrefab)
+    {
+        StartCoroutine(UpdateLeaderboard(leaderboardPanel, leaderboardPanelPrefab));
     }
 
     private void StartListeningToDatabaseChanges()
@@ -113,7 +117,7 @@ public class LeaderboardManager : MonoBehaviour
             long currentUserScore = Convert.ToInt64(userScoreSnapshot.Value);
             if (previousUserScore != currentUserScore)
             {
-                StartCoroutine(UpdateLeaderboard());
+                StartCoroutine(UpdateLeaderboard(leaderboardPanel, leaderboardPanelPrefab));
                 previousUserScore = currentUserScore;
             }
         }
@@ -148,7 +152,7 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    public IEnumerator UpdateLeaderboard()
+    public IEnumerator UpdateLeaderboard(Transform leaderboardPanel, GameObject leaderboardPanelPrefab)
     {
         var getScoresTask = databaseReference.Child("scores").OrderByChild("score").LimitToLast(10).GetValueAsync();
 
@@ -179,13 +183,13 @@ public class LeaderboardManager : MonoBehaviour
         }
 
         scoreEntries = scoreEntries.OrderByDescending(entry => entry.score).ToList();
-        
+
         rankCounter = 1;
         foreach (var entry in scoreEntries)
         {
 
             GameObject panel = Instantiate(leaderboardPanelPrefab, leaderboardPanel);
-            panel.GetComponent<ScorePF>().RankTxt.text = rankCounter.ToString()+".";
+            panel.GetComponent<ScorePF>().RankTxt.text = rankCounter.ToString() + ".";
             panel.GetComponent<ScorePF>().NameTxt.text = entry.name;
             panel.GetComponent<ScorePF>().ScoreTxt.text = entry.score.ToString();
             panel.GetComponent<ScorePF>().LevelTxt.text = "Lvl: " + entry.level.ToString();

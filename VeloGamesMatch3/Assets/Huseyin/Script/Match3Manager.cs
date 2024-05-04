@@ -19,6 +19,8 @@ public class Match3Manager : MonoBehaviour
     public GameObject LevelFrame;
     public GameObject ElementParent;
     public GameObject LevelGrids;
+    public Transform leaderboardPanel;
+    public GameObject leaderboardPanelPrefab;
     public Toggle LowToggle;
     public Toggle MediumToggle;
     public Toggle HighToggle;
@@ -166,5 +168,10 @@ public class Match3Manager : MonoBehaviour
         {
             Debug.LogWarning("FirebaseAuthManager is not initialized or there is no authenticated user.");
         }
+    }
+    public void UpdateLB()
+    {
+        leaderboardManager = FindAnyObjectByType<LeaderboardManager>();
+        leaderboardManager.UpdateLBAttributes(leaderboardPanel, leaderboardPanelPrefab);
     }
 }

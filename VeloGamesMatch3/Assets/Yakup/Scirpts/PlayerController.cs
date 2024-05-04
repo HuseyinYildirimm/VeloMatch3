@@ -14,13 +14,14 @@ public class PlayerController : MonoBehaviour
 
     private Collectables _collectablesObj;
     [SerializeField] private CaveLoginDoor _caveLoginDoor;
-   // OpeningAudioManager audioManager;
+
+    [SerializeField] private OpeningAudioManager _openingAudioManager;
 
     private void Awake()
     {
-        //audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<OpeningAudioManager>();
+
     }
-   
+
     public void SetAnimator()
     {
         Anim.SetTrigger("IsPicking");
@@ -37,7 +38,7 @@ public class PlayerController : MonoBehaviour
                 .OnComplete(() =>
                 {
                     Debug.Log("Collect");
-                    //audioManager.PlaySFX(audioManager.gem1);
+                    _openingAudioManager.Match();
                     CaveLoginDoor.CanDrop = true;
                     IsPicking = false;
                 });
@@ -59,7 +60,7 @@ public class PlayerController : MonoBehaviour
                 .OnComplete(() =>
                 {
                     Debug.Log("Drop");
-
+                    _openingAudioManager.Match();
                     _collectablesObj.transform.SetParent(CaveLoginDoor.transform.GetChild(0));
                     _collectablesObj.GFX.localScale = new Vector3(70f, 70f, 70f);
 
