@@ -27,17 +27,17 @@ public class LevelButton : MonoBehaviour
     private void OnButtonClick()
     {
         ElementBoard.Instance.BoardCleaning();
-        GameManager1.Instance.GetComponent<Collider2D>().enabled = false;
+        Match3Manager.Instance.GetComponent<Collider2D>().enabled = false;
         ElementBoard.Instance.InitializeBoard(rows, colums);
-        LevelManager1.Instance.currentLevel = levelID;
-        LevelManager1.Instance.SwapByLevel(levelID);
+        LevelManager.Instance.currentLevel = levelID;
+        LevelManager.Instance.SwapByLevel(levelID);
 
-        GameAudioManager.Instance.ButtonSound();
+        GameAudioManager.Instance.Button();
     }
 
     void UnlockedLevel()
     {
-        if (LevelManager1.Instance.IsLevelLocked(levelID))
+        if (LevelManager.Instance.IsLevelLocked(levelID))
         {
             lockedImage.gameObject.SetActive(true);
             button.interactable = false;

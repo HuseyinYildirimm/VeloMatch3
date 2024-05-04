@@ -112,7 +112,7 @@ public class ElementBoard : MonoBehaviour
         else
         {
             Debug.Log("There are no matches");
-            GameManager1.Instance.score = 0;
+            Match3Manager.Instance.score = 0;
         }
     }
 
@@ -211,6 +211,8 @@ public class ElementBoard : MonoBehaviour
             int _yIndex = element.yIndex;
 
             Destroy(element.gameObject);
+            Instantiate(Match3Manager.Instance.matchEffect, new Vector3(element.transform.position.x, element.transform.position.y, element.transform.position.z), Quaternion.identity);
+
 
             elementBoard[_xIndex, _yIndex] = new Tile(true, null);
 
@@ -406,8 +408,7 @@ public class ElementBoard : MonoBehaviour
     MatchResult IsConnected(Element element)//Checking the number of neighbors and taking action accordingly
     {
         List<Element> connectedElements = new();
-        ElementType elementType = element.elementType;
-        int score = element.elementScore * LevelManager1.Instance.currentLevel;
+        int score = element.elementScore * LevelManager.Instance.currentLevel;
         connectedElements.Add(element);
 
         CheckDirection(element, new Vector2Int(1, 0), connectedElements);
@@ -416,8 +417,8 @@ public class ElementBoard : MonoBehaviour
         if (connectedElements.Count == 3)
         {
             Debug.Log("Match Horizontal " + connectedElements[0].elementType);
-            GameManager1.Instance.score += score;
-            GameAudioManager.Instance.MatchSound();
+            Match3Manager.Instance.score += score;
+            GameAudioManager.Instance.Match();
 
             return new MatchResult
             {
@@ -428,8 +429,8 @@ public class ElementBoard : MonoBehaviour
         else if (connectedElements.Count > 3)
         {
             Debug.Log("Match Long Horizontal " + connectedElements[0].elementType);
-            GameManager1.Instance.score += score * 2;
-            GameAudioManager.Instance.MatchSound();
+            Match3Manager.Instance.score += score * 2;
+            GameAudioManager.Instance.Match();
 
             return new MatchResult
             {
@@ -447,8 +448,8 @@ public class ElementBoard : MonoBehaviour
         if (connectedElements.Count == 3)
         {
             Debug.Log("Match Vertical " + connectedElements[0].elementType);
-            GameManager1.Instance.score += score;
-            GameAudioManager.Instance.MatchSound();
+            Match3Manager.Instance.score += score;
+            GameAudioManager.Instance.Match();
 
             return new MatchResult
             {
@@ -459,8 +460,8 @@ public class ElementBoard : MonoBehaviour
         else if (connectedElements.Count > 3)
         {
             Debug.Log("Match Long Vertical " + connectedElements[0].elementType);
-            GameManager1.Instance.score += score * 2;
-            GameAudioManager.Instance.MatchSound();
+            Match3Manager.Instance.score += score * 2;
+            GameAudioManager.Instance.Match();
 
             return new MatchResult
             {
@@ -549,7 +550,7 @@ public class ElementBoard : MonoBehaviour
 
         isProcessingMove = true;
 
-        StartCoroutine(GameManager1.Instance.SwapRightAmount());
+        StartCoroutine(Match3Manager.Instance.SwapRightAmount());
 
         StartCoroutine(ProcessMatches(_currentElement, _targetElement));
 
@@ -610,7 +611,7 @@ public class ElementBoard : MonoBehaviour
 
     private void BoomExplode(int xIndex, int yIndex)
     {
-        GameManager1.Instance.score += boomScore;
+        Match3Manager.Instance.score += boomScore;
 
         // Explode elements in the same row
         for (int x = 0; x < Width; x++)
@@ -619,7 +620,6 @@ public class ElementBoard : MonoBehaviour
             if (elementToExplode != null && !elementToExplode.isMatched)
             {
                 elementsToRemove.Add(elementToExplode);
-               // audioManager.PlaySFX(audioManager.dynamite);
             }
         }
 
@@ -630,9 +630,10 @@ public class ElementBoard : MonoBehaviour
             if (elementToExplode != null && !elementToExplode.isMatched)
             {
                 elementsToRemove.Add(elementToExplode);
-                //audioManager.PlaySFX(audioManager.dynamite);
             }
         }
+
+        GameAudioManager.Instance.Boom();
 
         StartCoroutine(ProcessTurnOnMatchedBoard(false));
     }
@@ -645,10 +646,12 @@ public class ElementBoard : MonoBehaviour
         if (_currentElement.elementType == ElementType.Boom)
         {
             BoomExplode(_targetElement.xIndex, _targetElement.yIndex);
+            Instantiate(Match3Manager.Instance.boomEffect, new Vector3(_currentElement.transform.position.x, _currentElement.transform.position.y, _currentElement.transform.position.z), Quaternion.identity);
         }
         else if (_targetElement.elementType == ElementType.Boom)
         {
             BoomExplode(_currentElement.xIndex, _currentElement.yIndex);
+            Instantiate(Match3Manager.Instance.boomEffect, new Vector3(_targetElement.transform.position.x, _targetElement.transform.position.y, _targetElement.transform.position.z), Quaternion.identity);
         }
     }
 

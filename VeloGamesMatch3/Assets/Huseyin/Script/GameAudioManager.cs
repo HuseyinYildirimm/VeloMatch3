@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameAudioManager : MonoBehaviour
 {
@@ -47,12 +47,12 @@ public class GameAudioManager : MonoBehaviour
         Play("Main");
     }
 
-    public void AdjustAllVolumes(float volume)
+    public void AdjustAllVolumes()
     {
         for (int i = 0; i < audioSourceList.Count; i++)
         {
             float originalVolume = originalVolumes[i];
-            float newVolume = originalVolume * volume;
+            float newVolume = originalVolume * Match3Manager.Instance.slider.value;
 
             audioSourceList[i].volume = newVolume;
         }
@@ -86,23 +86,22 @@ public class GameAudioManager : MonoBehaviour
         }
     }
 
-    public void ButtonSound()
+    public void Button()
     {
         Play("Button");
-        Debug.Log("Button");
     }
 
-    public void MatchSound()
+    public void Match()
     {
         Play("Match");
     }
 
-    public void BoomSound()
+    public void Boom()
     {
-
+        Play("Boom");
     }
 
-    public void WinSound()
+    public void Win()
     {
         Play("Win");
     }

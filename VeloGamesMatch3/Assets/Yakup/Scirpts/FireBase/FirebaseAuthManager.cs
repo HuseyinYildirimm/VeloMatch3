@@ -177,8 +177,6 @@ public class FirebaseAuthManager : MonoBehaviour
         if (auth != null && user != null)
         {
             auth.SignOut();
-            Instance = null;
-            Destroy(gameObject);
         }
     }
 

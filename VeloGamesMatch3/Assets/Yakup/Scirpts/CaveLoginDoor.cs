@@ -18,6 +18,13 @@ public class CaveLoginDoor : MonoBehaviour
     public bool CanDrop = false;
     private const float MoveDuration = 2f;
 
+    [Header("Elements")]
+    public GameObject Yellow;
+    public GameObject Blue;
+    public GameObject Green;
+    public GameObject Purple;
+    public GameObject Red;
+
     private void Start()
     {
         CanDrop = false;

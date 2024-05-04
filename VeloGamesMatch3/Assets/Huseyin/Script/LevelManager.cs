@@ -14,9 +14,9 @@ public class Level
     public int swapRight;
 }
 
-public class LevelManager1 : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
-    public static LevelManager1 Instance;
+    public static LevelManager Instance;
     DatabaseReference databaseReference;
     [SerializeField] private List<Level> levels;
 
@@ -72,7 +72,7 @@ public class LevelManager1 : MonoBehaviour
     {
         Level temp = levels.Find(level => level.levelID == currentLevel);
 
-        if (temp != null && temp.levelScore <= GameManager1.Instance.score)
+        if (temp != null && temp.levelScore <= Match3Manager.Instance.score)
         {
             UnlockLevel(currentLevel + 1);
         }
@@ -103,7 +103,7 @@ public class LevelManager1 : MonoBehaviour
         Level tempLevel = levels.Find(level => level.levelID == _levelID);
 
         if (tempLevel != null)
-            GameManager1.Instance.swapRight = tempLevel.swapRight;
+            Match3Manager.Instance.swapRight = tempLevel.swapRight;
     }
 
     public bool PassedScore()
@@ -111,7 +111,7 @@ public class LevelManager1 : MonoBehaviour
         Level tempLevel = levels.Find(level => level.levelID == currentLevel);
         if (tempLevel != null)
         {
-            return GameManager1.Instance.score >= tempLevel.levelScore;
+            return Match3Manager.Instance.score >= tempLevel.levelScore;
         }
         return false;
     }

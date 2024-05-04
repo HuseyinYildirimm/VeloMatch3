@@ -13,19 +13,14 @@ public class PlayerController : MonoBehaviour
     public bool IsPicking = false;
 
     private Collectables _collectablesObj;
-    private GameManager _gameManager;
+    [SerializeField] private CaveLoginDoor _caveLoginDoor;
    // OpeningAudioManager audioManager;
 
     private void Awake()
     {
         //audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<OpeningAudioManager>();
-
     }
-    private void Start()
-    {
-        _gameManager = FindAnyObjectByType<GameManager>();
-    }
-
+   
     public void SetAnimator()
     {
         Anim.SetTrigger("IsPicking");
@@ -121,19 +116,19 @@ public class PlayerController : MonoBehaviour
         switch (name)
         {
             case "RED":
-                _gameManager.Red.SetActive(true);
+                _caveLoginDoor.Red.SetActive(true);
                 break;
             case "BLUE":
-                _gameManager.Blue.SetActive(true);
+                _caveLoginDoor.Blue.SetActive(true);
                 break;
             case "GREEN":
-                _gameManager.Green.SetActive(true);
+                _caveLoginDoor.Green.SetActive(true);
                 break;
             case "PURPLE":
-                _gameManager.Purple.SetActive(true);
+                _caveLoginDoor.Purple.SetActive(true);
                 break;
             case "YELLOW":
-                _gameManager.Yellow.SetActive(true);
+                _caveLoginDoor.Yellow.SetActive(true);
                 break;
             default:
                 Debug.LogWarning("Unknown rock color!");

@@ -38,7 +38,6 @@ public class LeaderboardManager : MonoBehaviour
     }
     private void Start()
     {
-
         StartCoroutine(InitializeFirebase());
     }
 
@@ -67,6 +66,11 @@ public class LeaderboardManager : MonoBehaviour
             UIManager.Instance.ErrorTxT.text = "Failed to check Firebase dependencies: " + dependencyTask.Result;
 
         }
+    }
+
+    public void UpdateLB()
+    {
+        StartCoroutine(UpdateLeaderboard());
     }
 
     private void StartListeningToDatabaseChanges()
