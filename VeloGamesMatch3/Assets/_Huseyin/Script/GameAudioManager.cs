@@ -10,19 +10,6 @@ public class GameAudioManager : MonoBehaviour
     private List<AudioSource> audioSourceList = new List<AudioSource>();
     private List<float> originalVolumes = new List<float>();
 
-    public void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        DontDestroyOnLoad(gameObject);
-    }
 
     private void Start()
     {

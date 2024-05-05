@@ -37,13 +37,11 @@ public class ElementBoard : MonoBehaviour
 
     public static ElementBoard Instance;
 
-    //GameAudioManager audioManager;
+    [SerializeField] private GameAudioManager _audioManager;
 
     public void Awake()
     {
         Instance = this;
-
-        //audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<GameAudioManager>();
     }
 
     public void Update()
@@ -169,7 +167,6 @@ public class ElementBoard : MonoBehaviour
                                     e.isMatched = true;
 
                                 hasMatched = true;
-                               // audioManager.PlaySFX(audioManager.stone);
                             }
                         }
                     }
@@ -418,7 +415,7 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Horizontal " + connectedElements[0].elementType);
             Match3Manager.Instance.score += score;
-            GameAudioManager.Instance.Match();
+            _audioManager.Match();
 
             return new MatchResult
             {
@@ -430,7 +427,7 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Long Horizontal " + connectedElements[0].elementType);
             Match3Manager.Instance.score += score * 2;
-            GameAudioManager.Instance.Match();
+            _audioManager.Match();
 
             return new MatchResult
             {
@@ -449,7 +446,7 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Vertical " + connectedElements[0].elementType);
             Match3Manager.Instance.score += score;
-            GameAudioManager.Instance.Match();
+            _audioManager.Match();
 
             return new MatchResult
             {
@@ -461,7 +458,7 @@ public class ElementBoard : MonoBehaviour
         {
             Debug.Log("Match Long Vertical " + connectedElements[0].elementType);
             Match3Manager.Instance.score += score * 2;
-            GameAudioManager.Instance.Match();
+            _audioManager.Match();
 
             return new MatchResult
             {
@@ -633,7 +630,7 @@ public class ElementBoard : MonoBehaviour
             }
         }
 
-        GameAudioManager.Instance.Boom();
+        _audioManager.Boom();
 
         StartCoroutine(ProcessTurnOnMatchedBoard(false));
     }

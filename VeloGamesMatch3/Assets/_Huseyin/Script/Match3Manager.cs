@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Toggle = UnityEngine.UI.Toggle;
 
 public class Match3Manager : MonoBehaviour
@@ -17,13 +16,14 @@ public class Match3Manager : MonoBehaviour
     public GameObject GameAgainButton;
     public GameObject PassedLevelButton;
     public GameObject LevelFrame;
-    public GameObject settingsFrame;
+    public GameObject SettingsFrame;
     public GameObject ElementParent;
     public GameObject LevelGrids;
     public Transform leaderboardPanel;
     public GameObject leaderboardPanelPrefab;
     public GameObject quitButton;
     public GameObject lbButton;
+    [SerializeField] private Button _settingsButton;
     public Toggle LowToggle;
     public Toggle MediumToggle;
     public Toggle HighToggle;
@@ -46,6 +46,8 @@ public class Match3Manager : MonoBehaviour
     public UnityEngine.UI.Slider slider;
 
     [HideInInspector] public BoxCollider2D Collider2D;
+    [SerializeField] private GameAudioManager _audioManager;
+    [SerializeField] private ElementBoard _elementBoard;
 
 
     public void Awake()
@@ -87,6 +89,12 @@ public class Match3Manager : MonoBehaviour
 
             Collider2D.enabled = true;
         }
+
+        if (_elementBoard.isProcessingMove)
+        {
+            _settingsButton.interactable = false;
+        }
+
     }
 
     public void GoToMenu()
@@ -110,6 +118,8 @@ public class Match3Manager : MonoBehaviour
         Application.Quit();
     }
 
+
+
     public void SettingsBackButton()
     {
         if (LevelFrame.activeInHierarchy)
@@ -122,7 +132,7 @@ public class Match3Manager : MonoBehaviour
             LevelGrids.SetActive(true);
         }
 
-        if (!settingsFrame.activeInHierarchy)
+        if (!SettingsFrame.activeInHierarchy)
         {
             quitButton.SetActive(true);
             lbButton.SetActive(true);
@@ -160,12 +170,12 @@ public class Match3Manager : MonoBehaviour
     #region Sound
     public void ButtonSound()
     {
-        GameAudioManager.Instance.Button();
+        _audioManager.Button();
     }
 
     public void WinSound()
     {
-        GameAudioManager.Instance.Win();
+        _audioManager.Win();
     }
 
     #endregion
@@ -173,6 +183,7 @@ public class Match3Manager : MonoBehaviour
     public IEnumerator SwapRightAmount()
     {
         yield return new WaitForSeconds(delay);
+        _settingsButton.interactable = true;
         swapRight--;
     }
 

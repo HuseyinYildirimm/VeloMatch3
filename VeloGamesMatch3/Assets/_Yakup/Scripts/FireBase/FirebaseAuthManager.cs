@@ -24,7 +24,6 @@ public class FirebaseAuthManager : MonoBehaviour
     [Header("Login")]
     public InputField emailLoginField;
     public InputField passwordLoginField;
-
     // Registration Variables
     [Space]
     [Header("Registration")]
@@ -85,7 +84,7 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             Debug.LogError("Could not resolve all firebase dependencies: " + dependencyStatus);
             UIManager.Instance.ErrorTxT.text = "Could not resolve all firebase dependencies: " + dependencyStatus;
-
+            UIManager.Instance.ActivateInfoText();
         }
     }
 
@@ -168,8 +167,8 @@ public class FirebaseAuthManager : MonoBehaviour
 
     public void Login()
     {
-        if(emailLoginField != null && passwordLoginField != null) 
-        StartCoroutine(LoginAsync(emailLoginField.text, passwordLoginField.text));
+        if (emailLoginField != null && passwordLoginField != null)
+            StartCoroutine(LoginAsync(emailLoginField.text, passwordLoginField.text));
     }
 
     public void Logout()
@@ -215,8 +214,9 @@ public class FirebaseAuthManager : MonoBehaviour
             }
 
             Debug.Log(failedMessage);
-            UIManager.Instance.ErrorTxT.text = failedMessage;
 
+            UIManager.Instance.ErrorTxT.text = failedMessage;
+            UIManager.Instance.ActivateInfoText();
         }
         else
         {
@@ -253,16 +253,19 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             Debug.LogError("User Name is empty");
             UIManager.Instance.ErrorTxT.text = "User Name is empty";
+            UIManager.Instance.ActivateInfoText();
         }
         else if (email == "")
         {
             Debug.LogError("email field is empty");
             UIManager.Instance.ErrorTxT.text = "email field is empty";
+            UIManager.Instance.ActivateInfoText();
         }
         else if (passwordRegisterField.text != confirmPasswordRegisterField.text)
         {
             Debug.LogError("Password does not match");
             UIManager.Instance.ErrorTxT.text = "Password does not match";
+            UIManager.Instance.ActivateInfoText();
         }
         else
         {
@@ -299,6 +302,8 @@ public class FirebaseAuthManager : MonoBehaviour
 
                 Debug.Log(failedMessage);
                 UIManager.Instance.ErrorTxT.text = failedMessage;
+                UIManager.Instance.ActivateInfoText();
+
             }
             else
             {
@@ -343,6 +348,7 @@ public class FirebaseAuthManager : MonoBehaviour
                     }
 
                     Debug.Log(failedMessage);
+
                 }
                 else
                 {
@@ -391,11 +397,13 @@ public class FirebaseAuthManager : MonoBehaviour
                 }
 
                 UIManager.Instance.ShowVerificationResponse(false, user.Email, errorMessage);
+
             }
             else
             {
                 Debug.Log("Email has successfully sent");
                 UIManager.Instance.ShowVerificationResponse(true, user.Email, null);
+
             }
         }
     }
@@ -433,6 +441,7 @@ public class FirebaseAuthManager : MonoBehaviour
             {
                 Debug.LogError("Invalid URL format:" + url);
                 UIManager.Instance.ErrorTxT.text = "Invalid URL format:" + url;
+                UIManager.Instance.ActivateInfoText();
             }
         }
     }

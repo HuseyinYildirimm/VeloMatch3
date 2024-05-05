@@ -11,6 +11,7 @@ public class LevelButton : MonoBehaviour
     public int colums;
 
     private Button button;
+    [SerializeField] private GameAudioManager _audioManager;
 
     public void Start()
     {
@@ -32,7 +33,7 @@ public class LevelButton : MonoBehaviour
         LevelManager.Instance.currentLevel = levelID;
         LevelManager.Instance.SwapByLevel(levelID);
 
-        GameAudioManager.Instance.Button();
+        _audioManager.Button();
     }
 
     void UnlockedLevel()

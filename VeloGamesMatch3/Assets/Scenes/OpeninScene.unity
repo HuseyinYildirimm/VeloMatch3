@@ -8871,7 +8871,7 @@ MonoBehaviour:
   - {fileID: 860471064121543726}
   - {fileID: 989477324}
   - {fileID: 1595010464}
-  RockPointCount: 4
+  RockPointCount: 0
   CanDrop: 0
   Yellow: {fileID: 1571212497}
   Blue: {fileID: 206524929}

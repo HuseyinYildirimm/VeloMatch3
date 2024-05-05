@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
 
     public Text NameTxt;
     public Text ErrorTxT;
+    private const float TextDuration = 5f;
 
     [Header("Login")]
     public InputField emailLoginField;
@@ -68,7 +69,6 @@ public class UIManager : MonoBehaviour
         emailVerificationPanel.SetActive(false);
         gamePanel.SetActive(false);
     }
-
 
     public void OpenCloseProfileUpdatePanel()
     {
@@ -121,6 +121,7 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("Error loading image: " + www.error);
             ErrorTxT.text = "Error loading image: " + www.error;
+            ActivateInfoText();
         }
         else
         {
@@ -137,14 +138,25 @@ public class UIManager : MonoBehaviour
 
                 Debug.LogError("Downloaded texture is null");
                 ErrorTxT.text = "Downloaded texture is null";
-
+                ActivateInfoText();
             }
         }
     }
 
-
     public string GetUpdateURL()
     {
         return urlInputField.text;
+    }
+
+    public void ActivateInfoText()
+    {
+        StartCoroutine(ActivateInfoTextIE());
+    }
+
+    public IEnumerator ActivateInfoTextIE()
+    {
+        yield return new WaitForSeconds(TextDuration);
+
+        ErrorTxT.text = null;
     }
 }

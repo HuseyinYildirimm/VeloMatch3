@@ -1006,13 +1006,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1074337657}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1074337658}
+        m_TargetAssemblyTypeName: Match3Manager, Assembly-CSharp
+        m_MethodName: QuitButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1776,7 +1776,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.92156863}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -2476,6 +2476,7 @@ MonoBehaviour:
   lockedImage: {fileID: 111073574}
   rows: 12
   colums: 8
+  _audioManager: {fileID: 653877216}
 --- !u!114 &390792473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3636,6 +3637,7 @@ MonoBehaviour:
   boomScore: 50
   boomThreshold: 0.01
   elementsToDestroy: []
+  _audioManager: {fileID: 653877216}
 --- !u!4 &596856492
 Transform:
   m_ObjectHideFlags: 0
@@ -4375,6 +4377,7 @@ MonoBehaviour:
   lockedImage: {fileID: 718570460}
   rows: 10
   colums: 7
+  _audioManager: {fileID: 653877216}
 --- !u!114 &762470021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5669,7 +5672,7 @@ GameObject:
   - component: {fileID: 1074337660}
   - component: {fileID: 1074337661}
   m_Layer: 0
-  m_Name: GameManager1
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5690,7 +5693,7 @@ MonoBehaviour:
   GameAgainButton: {fileID: 990260365}
   PassedLevelButton: {fileID: 1128241440}
   LevelFrame: {fileID: 177122550}
-  settingsFrame: {fileID: 1450236706}
+  SettingsFrame: {fileID: 1450236706}
   ElementParent: {fileID: 950977106}
   LevelGrids: {fileID: 685765293}
   leaderboardPanel: {fileID: 927704332}
@@ -5698,6 +5701,7 @@ MonoBehaviour:
     type: 3}
   quitButton: {fileID: 177626905}
   lbButton: {fileID: 1950943290}
+  _settingsButton: {fileID: 321198677}
   LowToggle: {fileID: 1191991440}
   MediumToggle: {fileID: 148178801}
   HighToggle: {fileID: 621624410}
@@ -5711,6 +5715,8 @@ MonoBehaviour:
     type: 3}
   slider: {fileID: 2052267994}
   Collider2D: {fileID: 0}
+  _audioManager: {fileID: 653877216}
+  _elementBoard: {fileID: 596856491}
 --- !u!4 &1074337659
 Transform:
   m_ObjectHideFlags: 0
@@ -7822,6 +7828,7 @@ MonoBehaviour:
   lockedImage: {fileID: 665680396}
   rows: 6
   colums: 6
+  _audioManager: {fileID: 653877216}
 --- !u!114 &1427194327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10026,6 +10033,7 @@ MonoBehaviour:
   lockedImage: {fileID: 1468715044}
   rows: 5
   colums: 5
+  _audioManager: {fileID: 653877216}
 --- !u!114 &2017802685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10337,6 +10345,7 @@ MonoBehaviour:
   lockedImage: {fileID: 578387131}
   rows: 7
   colums: 7
+  _audioManager: {fileID: 653877216}
 --- !u!114 &2040395284
 MonoBehaviour:
   m_ObjectHideFlags: 0

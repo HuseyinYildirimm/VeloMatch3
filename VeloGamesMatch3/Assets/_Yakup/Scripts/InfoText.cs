@@ -5,8 +5,9 @@ using UnityEngine.UI;
 public class InfoText : MonoBehaviour
 {
     [SerializeField] private Text _InfoText;
-    private const float TextDuration = 10f;
+    [SerializeField] private float TextDuration = 10f;
 
+    private bool infoTextCoroutineRunning = false;
 
     private void Start()
     {
@@ -15,10 +16,16 @@ public class InfoText : MonoBehaviour
     }
 
 
-    private IEnumerator ActivateInfoText()
+    public IEnumerator ActivateInfoText()
     {
+        if (infoTextCoroutineRunning)
+            yield break;
+
+        infoTextCoroutineRunning = true;
 
         yield return new WaitForSeconds(TextDuration);
-        _InfoText.gameObject.SetActive(false);
+
+        _InfoText.text = null;
+        infoTextCoroutineRunning = false;
     }
 }
