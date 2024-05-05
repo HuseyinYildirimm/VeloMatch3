@@ -13,12 +13,14 @@ public class CaveLoginDoor : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera _virtualCamera;
 
     [SerializeField] private PlayerController _playerController;
+    [SerializeField] private LoadingFrame _loadingFrame;
+
     public Transform[] UniqueRockPositions;
     public Transform[] Waypoints;
 
     public int RockPointCount = 0;
     public bool CanDrop = false;
-    private const float MoveDuration = 2f;
+    private const float MoveDuration = 1.5f;
 
     [Header("Elements")]
     public GameObject Yellow;
@@ -65,6 +67,7 @@ public class CaveLoginDoor : MonoBehaviour
     public void GoToCave(Transform player)
     {
         StartCoroutine(GoToCaveIE(player));
+        _loadingFrame.LoadScene();
     }
 
     public IEnumerator GoToCaveIE(Transform player)
@@ -84,5 +87,7 @@ public class CaveLoginDoor : MonoBehaviour
         }
 
         SceneManager.LoadScene("GameScene");
+
+
     }
 }

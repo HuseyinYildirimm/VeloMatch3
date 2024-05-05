@@ -17,10 +17,13 @@ public class Match3Manager : MonoBehaviour
     public GameObject GameAgainButton;
     public GameObject PassedLevelButton;
     public GameObject LevelFrame;
+    public GameObject settingsFrame;
     public GameObject ElementParent;
     public GameObject LevelGrids;
     public Transform leaderboardPanel;
     public GameObject leaderboardPanelPrefab;
+    public GameObject quitButton;
+    public GameObject lbButton;
     public Toggle LowToggle;
     public Toggle MediumToggle;
     public Toggle HighToggle;
@@ -102,6 +105,11 @@ public class Match3Manager : MonoBehaviour
         SceneManager.LoadScene("GameScene");
     }
 
+    public void QuitButton()
+    {
+        Application.Quit();
+    }
+
     public void SettingsBackButton()
     {
         if (LevelFrame.activeInHierarchy)
@@ -112,6 +120,17 @@ public class Match3Manager : MonoBehaviour
         {
             ElementParent.SetActive(true);
             LevelGrids.SetActive(true);
+        }
+
+        if (!settingsFrame.activeInHierarchy)
+        {
+            quitButton.SetActive(true);
+            lbButton.SetActive(true);
+        }
+        else if (LevelGrids.activeInHierarchy)
+        {
+            quitButton.SetActive(false);
+            lbButton.SetActive(false);
         }
     }
 
@@ -138,6 +157,7 @@ public class Match3Manager : MonoBehaviour
     }
     #endregion
 
+    #region Sound
     public void ButtonSound()
     {
         GameAudioManager.Instance.Button();
@@ -147,6 +167,8 @@ public class Match3Manager : MonoBehaviour
     {
         GameAudioManager.Instance.Win();
     }
+
+    #endregion
 
     public IEnumerator SwapRightAmount()
     {

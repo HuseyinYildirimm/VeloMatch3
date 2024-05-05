@@ -7,13 +7,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Text messageText;
 
-
-    public GameObject Yellow;
-    public GameObject Blue;
-    public GameObject Green;
-    public GameObject Purple;
-    public GameObject Red;
-
     // Start is called before the first frame update
     void Start()
     {

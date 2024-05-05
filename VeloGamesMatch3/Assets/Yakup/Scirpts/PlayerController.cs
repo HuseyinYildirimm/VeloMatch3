@@ -17,11 +17,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private OpeningAudioManager _openingAudioManager;
 
-    private void Awake()
-    {
-
-    }
-
+ 
     public void SetAnimator()
     {
         Anim.SetTrigger("IsPicking");
