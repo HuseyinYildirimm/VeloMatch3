@@ -3838,7 +3838,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!1 &653877215
 GameObject:
   m_ObjectHideFlags: 0
@@ -5748,19 +5748,19 @@ MonoBehaviour:
   - levelID: 1
     isLocked: 0
     levelScore: 200
-    swapRight: 8
+    swapRight: 9
   - levelID: 2
     isLocked: 1
     levelScore: 400
-    swapRight: 7
+    swapRight: 8
   - levelID: 3
     isLocked: 1
     levelScore: 800
-    swapRight: 6
+    swapRight: 7
   - levelID: 4
     isLocked: 1
     levelScore: 1200
-    swapRight: 8
+    swapRight: 10
   - levelID: 5
     isLocked: 1
     levelScore: 4000
@@ -6921,7 +6921,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &1200296637
 GameObject:
   m_ObjectHideFlags: 0

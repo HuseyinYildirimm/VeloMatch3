@@ -3818,6 +3818,7 @@ MonoBehaviour:
   dependencyStatus: 0
   emailLoginField: {fileID: 896712346}
   passwordLoginField: {fileID: 1577326456}
+  isUser: 0
   nameRegisterField: {fileID: 1781917333}
   emailRegisterField: {fileID: 1542321294}
   passwordRegisterField: {fileID: 77452608}

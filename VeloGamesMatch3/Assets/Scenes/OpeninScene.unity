@@ -1175,6 +1175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _InfoText: {fileID: 215692168}
+  TextDuration: 10
 --- !u!4 &218968789 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6345375326479054072, guid: 9fd89c45bf7e1304088137c6ba34dbb0,
@@ -9221,6 +9222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _InfoText: {fileID: 2053814875}
+  TextDuration: 10
 --- !u!4 &2077484879 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9048626503133307414, guid: 74b914677bbfa914daea0970c81540a5,

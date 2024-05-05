@@ -24,6 +24,7 @@ public class FirebaseAuthManager : MonoBehaviour
     [Header("Login")]
     public InputField emailLoginField;
     public InputField passwordLoginField;
+    public int isUser;
     // Registration Variables
     [Space]
     [Header("Registration")]
@@ -148,6 +149,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log("Signed out " + user.UserId);
                 UIManager.Instance.OpenLoginPanel();
                 ClearLoginInputFieldText();
+
             }
 
             user = auth.CurrentUser;
@@ -176,6 +178,7 @@ public class FirebaseAuthManager : MonoBehaviour
         if (auth != null && user != null)
         {
             auth.SignOut();
+            isUser = 0;
         }
     }
 
@@ -369,6 +372,7 @@ public class FirebaseAuthManager : MonoBehaviour
     public void SendEmailForVerifaction()
     {
         StartCoroutine(SendEmailVerifactionAsync());
+
     }
 
     private IEnumerator SendEmailVerifactionAsync()
@@ -448,13 +452,59 @@ public class FirebaseAuthManager : MonoBehaviour
 
     public void OpenGameScene()
     {
-        if (user != null)
+        ScoreSave();
+
+        if (isUser == 0)
         {
-            SceneManager.LoadScene(1);
+            if (user != null)
+            {
+                var getPassedTask = LeaderboardManager.Instance.databaseReference.Child("scores").OrderByChild("passed").GetValueAsync();
+                int pass = Convert.ToInt32(getPassedTask);
+
+                if (pass == 1)
+                {
+                    isUser = 1;
+                }
+                else
+                    isUser = 0;
+
+                SceneManager.LoadScene(1);
+            }
+            else
+            {
+                UIManager.Instance.OpenLoginPanel();
+            }
         }
         else
         {
-            UIManager.Instance.OpenLoginPanel();
+            SceneManager.LoadScene(2);
+        }
+
+
+    }
+
+    public long value;
+
+    public void ScoreSave()
+    {
+        if (gameObject != null && auth != null && auth.CurrentUser != null)
+        {
+           var getScoresTask = LeaderboardManager.Instance.databaseReference.Child("scores").OrderByChild("score").LimitToLast(10).GetValueAsync();
+           
+            DataSnapshot snapshot = getScoresTask.Result;
+
+            foreach (var childSnapshot in snapshot.Children)
+            {
+                value = (long)childSnapshot.Child("score").Value;
+            }
+
+            LeaderboardManager.Instance.ScoreData(auth.CurrentUser.DisplayName, value, LevelManager.Instance.currentLevel + 1, isUser);
+
+            // StartCoroutine(LeaderboardManager.Instance.UpdateLeaderboard());
+        }
+        else
+        {
+            Debug.LogWarning("FirebaseAuthManager is not initialized or there is no authenticated user.");
         }
     }
 }

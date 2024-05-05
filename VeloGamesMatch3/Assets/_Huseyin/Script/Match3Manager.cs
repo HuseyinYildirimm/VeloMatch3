@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -63,6 +64,7 @@ public class Match3Manager : MonoBehaviour
         PassedLevelButton.SetActive(false);
 
         UnityEngine.Cursor.visible = true;
+        HighQuality();
 
     }
 
@@ -194,7 +196,8 @@ public class Match3Manager : MonoBehaviour
         if (firebaseAuthManager != null && firebaseAuthManager.auth != null && firebaseAuthManager.auth.CurrentUser != null)
         {
             leaderboardManager = FindAnyObjectByType<LeaderboardManager>();
-            leaderboardManager.ScoreData(firebaseAuthManager.auth.CurrentUser.DisplayName, score, LevelManager.Instance.currentLevel + 1);
+
+            leaderboardManager.ScoreData(firebaseAuthManager.auth.CurrentUser.DisplayName, score, LevelManager.Instance.currentLevel + 1 ,firebaseAuthManager.isUser);
             // StartCoroutine(LeaderboardManager.Instance.UpdateLeaderboard());
         }
         else
@@ -202,6 +205,8 @@ public class Match3Manager : MonoBehaviour
             Debug.LogWarning("FirebaseAuthManager is not initialized or there is no authenticated user.");
         }
     }
+
+    
     public void UpdateLB()
     {
         leaderboardManager = FindAnyObjectByType<LeaderboardManager>();

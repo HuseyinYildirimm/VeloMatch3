@@ -123,7 +123,7 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    public void ScoreData(string playerName, long score, int level)
+    public void ScoreData(string playerName, long score, int level,int passed)
     {
         if (string.IsNullOrEmpty(playerName))
         {
@@ -132,7 +132,7 @@ public class LeaderboardManager : MonoBehaviour
             return;
         }
 
-        ScoreEntry newEntry = new ScoreEntry(playerName, score, auth.CurrentUser.UserId, level);
+        ScoreEntry newEntry = new ScoreEntry(playerName, score, auth.CurrentUser.UserId, level,passed);
         UpdateUserScore(newEntry);
     }
 
@@ -155,6 +155,7 @@ public class LeaderboardManager : MonoBehaviour
     public IEnumerator UpdateLeaderboard(Transform leaderboardPanel, GameObject leaderboardPanelPrefab)
     {
         var getScoresTask = databaseReference.Child("scores").OrderByChild("score").LimitToLast(10).GetValueAsync();
+      
 
         yield return new WaitUntil(() => getScoresTask.IsCompleted);
 
@@ -179,7 +180,7 @@ public class LeaderboardManager : MonoBehaviour
             long playerScore = (long)childSnapshot.Child("score").Value;
             string userId = childSnapshot.Key;
             int playerLevel = Convert.ToInt32(childSnapshot.Child("level").Value);
-            scoreEntries.Add(new ScoreEntry(playerName, playerScore, userId, playerLevel));
+            scoreEntries.Add(new ScoreEntry(playerName, playerScore, userId, playerLevel,FirebaseAuthManager.Instance.isUser));
         }
 
         scoreEntries = scoreEntries.OrderByDescending(entry => entry.score).ToList();
