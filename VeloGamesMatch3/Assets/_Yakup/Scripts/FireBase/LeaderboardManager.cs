@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class LeaderboardManager : MonoBehaviour
 {
@@ -123,7 +124,7 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    public void ScoreData(string playerName, long score, int level,int passed)
+    public void ScoreData(string playerName, long score, int level)
     {
         if (string.IsNullOrEmpty(playerName))
         {
@@ -132,7 +133,8 @@ public class LeaderboardManager : MonoBehaviour
             return;
         }
 
-        ScoreEntry newEntry = new ScoreEntry(playerName, score, auth.CurrentUser.UserId, level,passed);
+        ScoreEntry newEntry = new ScoreEntry(playerName, score, auth.CurrentUser.UserId, level);
+
         UpdateUserScore(newEntry);
     }
 
@@ -155,7 +157,7 @@ public class LeaderboardManager : MonoBehaviour
     public IEnumerator UpdateLeaderboard(Transform leaderboardPanel, GameObject leaderboardPanelPrefab)
     {
         var getScoresTask = databaseReference.Child("scores").OrderByChild("score").LimitToLast(10).GetValueAsync();
-      
+
 
         yield return new WaitUntil(() => getScoresTask.IsCompleted);
 
@@ -180,7 +182,7 @@ public class LeaderboardManager : MonoBehaviour
             long playerScore = (long)childSnapshot.Child("score").Value;
             string userId = childSnapshot.Key;
             int playerLevel = Convert.ToInt32(childSnapshot.Child("level").Value);
-            scoreEntries.Add(new ScoreEntry(playerName, playerScore, userId, playerLevel,FirebaseAuthManager.Instance.isUser));
+            scoreEntries.Add(new ScoreEntry(playerName, playerScore, userId, playerLevel));
         }
 
         scoreEntries = scoreEntries.OrderByDescending(entry => entry.score).ToList();
@@ -198,5 +200,35 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
+    public void GetPassedValue(string userId, Action<int> callback)
+    {
+        // Query Firebase database to get user's 'passed' value
+        databaseReference.Child("scores").Child(userId).GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCompletedSuccessfully)
+            {
+                // Task completed successfully
+                DataSnapshot snapshot = task.Result;
+
+                if (snapshot.Exists && snapshot.HasChild("passed"))
+                {
+                    int passed = Convert.ToInt32(snapshot.Child("passed").Value);
+                    callback(passed);
+                }
+                else
+                {
+                    // 'passed' value not found
+                    Debug.LogWarning("User's 'passed' value not found in the database.");
+                    callback(-1); // You may handle this case differently based on your application's logic
+                }
+            }
+            else if (task.IsFaulted)
+            {
+                // Task failed
+                Debug.LogWarning("Task failed: " + task.Exception);
+                callback(-1); // You may handle this case differently based on your application's logic
+            }
+        });
+    }
 }
 

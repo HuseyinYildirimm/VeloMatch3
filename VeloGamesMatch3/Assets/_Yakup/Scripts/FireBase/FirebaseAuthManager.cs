@@ -56,6 +56,7 @@ public class FirebaseAuthManager : MonoBehaviour
     private void Start()
     {
         // Firebase bağımlılıklarını başlat
+        isUser = 0;
         StartCoroutine(CheckAndFixDependenciesAsync());
     }
 
@@ -452,59 +453,15 @@ public class FirebaseAuthManager : MonoBehaviour
 
     public void OpenGameScene()
     {
-        ScoreSave();
-
-        if (isUser == 0)
-        {
-            if (user != null)
-            {
-                var getPassedTask = LeaderboardManager.Instance.databaseReference.Child("scores").OrderByChild("passed").GetValueAsync();
-                int pass = Convert.ToInt32(getPassedTask);
-
-                if (pass == 1)
-                {
-                    isUser = 1;
-                }
-                else
-                    isUser = 0;
-
-                SceneManager.LoadScene(1);
-            }
-            else
-            {
-                UIManager.Instance.OpenLoginPanel();
-            }
-        }
-        else
-        {
-            SceneManager.LoadScene(2);
-        }
-
-
+        SceneManager.LoadScene(1);
     }
 
-    public long value;
 
-    public void ScoreSave()
-    {
-        if (gameObject != null && auth != null && auth.CurrentUser != null)
-        {
-           var getScoresTask = LeaderboardManager.Instance.databaseReference.Child("scores").OrderByChild("score").LimitToLast(10).GetValueAsync();
-           
-            DataSnapshot snapshot = getScoresTask.Result;
-
-            foreach (var childSnapshot in snapshot.Children)
-            {
-                value = (long)childSnapshot.Child("score").Value;
-            }
-
-            LeaderboardManager.Instance.ScoreData(auth.CurrentUser.DisplayName, value, LevelManager.Instance.currentLevel + 1, isUser);
-
-            // StartCoroutine(LeaderboardManager.Instance.UpdateLeaderboard());
-        }
-        else
-        {
-            Debug.LogWarning("FirebaseAuthManager is not initialized or there is no authenticated user.");
-        }
-    }
 }
+
+
+
+
+
+
+

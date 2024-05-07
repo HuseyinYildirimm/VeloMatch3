@@ -86,8 +86,8 @@ public class CaveLoginDoor : MonoBehaviour
             yield return waitForSeconds;
         }
 
-        SceneManager.LoadScene("GameScene");
 
+        SceneManager.LoadScene("GameScene");
 
     }
 }

@@ -197,7 +197,7 @@ public class Match3Manager : MonoBehaviour
         {
             leaderboardManager = FindAnyObjectByType<LeaderboardManager>();
 
-            leaderboardManager.ScoreData(firebaseAuthManager.auth.CurrentUser.DisplayName, score, LevelManager.Instance.currentLevel + 1 ,firebaseAuthManager.isUser);
+            leaderboardManager.ScoreData(firebaseAuthManager.auth.CurrentUser.DisplayName, score, LevelManager.Instance.currentLevel + 1);
             // StartCoroutine(LeaderboardManager.Instance.UpdateLeaderboard());
         }
         else
@@ -206,7 +206,7 @@ public class Match3Manager : MonoBehaviour
         }
     }
 
-    
+
     public void UpdateLB()
     {
         leaderboardManager = FindAnyObjectByType<LeaderboardManager>();
